@@ -1,0 +1,16 @@
+# T1.13 host-side Coral path. NOT INSTALLED. Requires NO Coral device.
+# PAPER FACT 3.3: FP32 run -> INT8 PTQ tflite -> edgetpu_compiler.
+# PAPER FACT ref 68: a community-maintained libedgetpu is required.
+#
+# Versions are OUR ASSUMPTION -- the paper states none.
+
+tensorflow
+onnx
+onnx-tf
+
+# System packages, NOT pip (see tools/compile_edgetpu.sh for the exact commands):
+#   edgetpu-compiler                 host-only, no device needed
+#   libedgetpu  (github.com/feranick/libedgetpu)   runtime, T3.1 only
+#
+# T3.1 runtime (needs the device, D9 PENDING):
+#   pycoral  or  tflite-runtime

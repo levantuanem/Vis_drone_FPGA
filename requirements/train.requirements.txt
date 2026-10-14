@@ -1,0 +1,31 @@
+# T1.2 / T1.3 / T1.4 / T1.12 training + export environment.
+# Versions are PAPER FACT Table 2, verbatim. NOT INSTALLED in this phase.
+#
+#   conda create -n visdrone_fpga python=3.10
+#   conda activate visdrone_fpga
+#   pip install -r requirements/train.requirements.txt
+#
+# cu117 covers the TITAN RTX (sm_75) on this host.
+# Install into an env on /mnt/data10tb if space on / is tight (84% used).
+
+--extra-index-url https://download.pytorch.org/whl/cu117
+torch==1.13.1+cu117
+torchvision==0.14.1+cu117
+brevitas==0.9.0
+numpy==1.26.3
+opencv-python==4.10.0.84
+pillow==11.1.0
+PyYAML==6.0.2
+requests==2.32.3
+scipy==1.15.0
+tqdm==4.67.1
+matplotlib==3.5.1
+tensorboard==2.15.2
+pandas==2.2.3
+seaborn==0.13.2
+thop==0.1.1.post2209072238
+
+# Export / graph tooling (versions NOT given by the paper -- OUR ASSUMPTION,
+# pin whatever brevitas 0.9.0 and FINN 0.10 agree on and record it here)
+onnx
+qonnx

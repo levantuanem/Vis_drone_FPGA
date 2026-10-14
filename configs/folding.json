@@ -1,0 +1,958 @@
+{
+  "_provenance": {
+    "decision": "D7 (PROJECT MANDATE) -- re-derived, never copied",
+    "procedure": "PAPER FACT paper sections 3.6.1 and 3.6.2",
+    "cost_model": "DERIVED FACT -- verified against paper Table 8",
+    "pinned_constraints": "REPOSITORY FACT driver.py folded shapes",
+    "resource_model": "OUR ASSUMPTION -- provisional, see configs/resource_model.yaml",
+    "status": "PROVISIONAL -- not validated by synthesis (T1.9 not run)",
+    "budget_fraction": 0.95
+  },
+  "fpga_part": "xc7z020clg400-1",
+  "target_clock_mhz": 200.0,
+  "balance_floor": {
+    "node": "StreamingMaxPool_L2",
+    "cycles": 216320
+  },
+  "folding": {
+    "MVAU_rtl_0": {
+      "PE": 8,
+      "SIMD": 27
+    },
+    "MVAU_rtl_1": {
+      "PE": 4,
+      "SIMD": 36
+    },
+    "MVAU_hls_0": {
+      "PE": 8,
+      "SIMD": 9
+    },
+    "MVAU_rtl_2": {
+      "PE": 8,
+      "SIMD": 9
+    },
+    "MVAU_hls_1": {
+      "PE": 7,
+      "SIMD": 9
+    },
+    "MVAU_hls_2": {
+      "PE": 8,
+      "SIMD": 9
+    },
+    "MVAU_hls_3": {
+      "PE": 26,
+      "SIMD": 9
+    },
+    "MVAU_hls_4": {
+      "PE": 2,
+      "SIMD": 8
+    },
+    "MVAU_rtl_3": {
+      "PE": 8,
+      "SIMD": 9
+    },
+    "MVAU_rtl_4": {
+      "PE": 1,
+      "SIMD": 18
+    }
+  },
+  "styles": {
+    "MVAU_rtl_0": "RTL",
+    "MVAU_rtl_1": "RTL",
+    "MVAU_hls_0": "HLS_LUT",
+    "MVAU_rtl_2": "RTL",
+    "MVAU_hls_1": "HLS_LUT",
+    "MVAU_hls_2": "HLS_LUT",
+    "MVAU_hls_3": "HLS_LUT",
+    "MVAU_hls_4": "HLS_LUT",
+    "MVAU_rtl_3": "RTL",
+    "MVAU_rtl_4": "RTL"
+  },
+  "estimated": {
+    "total_cycles": 2593305,
+    "max_node_cycles": 216320,
+    "max_node_name": "StreamingMaxPool_L2",
+    "dsp": 189,
+    "lut": 13274,
+    "bram18k": 111,
+    "calibration_required": true
+  },
+  "search_log": [
+    {
+      "iter": 0,
+      "action": "unfold",
+      "node": "MVAU_hls_3",
+      "PE": 1,
+      "SIMD": 2,
+      "style": "HLS_LUT",
+      "cycles_before": 32902272,
+      "cycles_after": 16451136
+    },
+    {
+      "iter": 1,
+      "action": "unfold",
+      "node": "MVAU_rtl_1",
+      "PE": 1,
+      "SIMD": 2,
+      "style": "RTL",
+      "cycles_before": 24920064,
+      "cycles_after": 12460032
+    },
+    {
+      "iter": 2,
+      "action": "unfold",
+      "node": "MVAU_hls_3",
+      "PE": 1,
+      "SIMD": 3,
+      "style": "HLS_LUT",
+      "cycles_before": 16451136,
+      "cycles_after": 10967424
+    },
+    {
+      "iter": 3,
+      "action": "unfold",
+      "node": "MVAU_rtl_1",
+      "PE": 1,
+      "SIMD": 3,
+      "style": "RTL",
+      "cycles_before": 12460032,
+      "cycles_after": 8306688
+    },
+    {
+      "iter": 4,
+      "action": "unfold",
+      "node": "MVAU_hls_0",
+      "PE": 1,
+      "SIMD": 2,
+      "style": "HLS_LUT",
+      "cycles_before": 12460032,
+      "cycles_after": 6230016
+    },
+    {
+      "iter": 5,
+      "action": "unfold",
+      "node": "MVAU_rtl_2",
+      "PE": 1,
+      "SIMD": 2,
+      "style": "RTL",
+      "cycles_before": 12460032,
+      "cycles_after": 6230016
+    },
+    {
+      "iter": 6,
+      "action": "unfold",
+      "node": "MVAU_hls_3",
+      "PE": 1,
+      "SIMD": 4,
+      "style": "HLS_LUT",
+      "cycles_before": 10967424,
+      "cycles_after": 8225568
+    },
+    {
+      "iter": 7,
+      "action": "unfold",
+      "node": "MVAU_hls_1",
+      "PE": 2,
+      "SIMD": 1,
+      "style": "HLS_LUT",
+      "cycles_before": 10902528,
+      "cycles_after": 5451264
+    },
+    {
+      "iter": 8,
+      "action": "unfold",
+      "node": "MVAU_hls_2",
+      "PE": 2,
+      "SIMD": 1,
+      "style": "HLS_LUT",
+      "cycles_before": 8858304,
+      "cycles_after": 4429152
+    },
+    {
+      "iter": 9,
+      "action": "unfold",
+      "node": "MVAU_rtl_3",
+      "PE": 2,
+      "SIMD": 1,
+      "style": "RTL",
+      "cycles_before": 8858304,
+      "cycles_after": 4429152
+    },
+    {
+      "iter": 10,
+      "action": "unfold",
+      "node": "MVAU_rtl_1",
+      "PE": 1,
+      "SIMD": 4,
+      "style": "RTL",
+      "cycles_before": 8306688,
+      "cycles_after": 6230016
+    },
+    {
+      "iter": 11,
+      "action": "unfold",
+      "node": "MVAU_hls_3",
+      "PE": 1,
+      "SIMD": 6,
+      "style": "HLS_LUT",
+      "cycles_before": 8225568,
+      "cycles_after": 5483712
+    },
+    {
+      "iter": 12,
+      "action": "unfold",
+      "node": "MVAU_rtl_1",
+      "PE": 1,
+      "SIMD": 6,
+      "style": "RTL",
+      "cycles_before": 6230016,
+      "cycles_after": 4153344
+    },
+    {
+      "iter": 13,
+      "action": "unfold",
+      "node": "MVAU_hls_0",
+      "PE": 1,
+      "SIMD": 3,
+      "style": "HLS_LUT",
+      "cycles_before": 6230016,
+      "cycles_after": 4153344
+    },
+    {
+      "iter": 14,
+      "action": "unfold",
+      "node": "MVAU_rtl_2",
+      "PE": 1,
+      "SIMD": 3,
+      "style": "RTL",
+      "cycles_before": 6230016,
+      "cycles_after": 4153344
+    },
+    {
+      "iter": 15,
+      "action": "unfold",
+      "node": "MVAU_hls_3",
+      "PE": 1,
+      "SIMD": 8,
+      "style": "HLS_LUT",
+      "cycles_before": 5483712,
+      "cycles_after": 4112784
+    },
+    {
+      "iter": 16,
+      "action": "unfold",
+      "node": "MVAU_hls_1",
+      "PE": 4,
+      "SIMD": 1,
+      "style": "HLS_LUT",
+      "cycles_before": 5451264,
+      "cycles_after": 2725632
+    },
+    {
+      "iter": 17,
+      "action": "unfold",
+      "node": "MVAU_hls_2",
+      "PE": 4,
+      "SIMD": 1,
+      "style": "HLS_LUT",
+      "cycles_before": 4429152,
+      "cycles_after": 2214576
+    },
+    {
+      "iter": 18,
+      "action": "unfold",
+      "node": "MVAU_rtl_3",
+      "PE": 4,
+      "SIMD": 1,
+      "style": "RTL",
+      "cycles_before": 4429152,
+      "cycles_after": 2214576
+    },
+    {
+      "iter": 19,
+      "action": "unfold",
+      "node": "MVAU_rtl_1",
+      "PE": 1,
+      "SIMD": 8,
+      "style": "RTL",
+      "cycles_before": 4153344,
+      "cycles_after": 3115008
+    },
+    {
+      "iter": 20,
+      "action": "unfold",
+      "node": "MVAU_hls_0",
+      "PE": 1,
+      "SIMD": 4,
+      "style": "HLS_LUT",
+      "cycles_before": 4153344,
+      "cycles_after": 3115008
+    },
+    {
+      "iter": 21,
+      "action": "unfold",
+      "node": "MVAU_rtl_2",
+      "PE": 1,
+      "SIMD": 4,
+      "style": "RTL",
+      "cycles_before": 4153344,
+      "cycles_after": 3115008
+    },
+    {
+      "iter": 22,
+      "action": "unfold",
+      "node": "MVAU_hls_3",
+      "PE": 1,
+      "SIMD": 9,
+      "style": "HLS_LUT",
+      "cycles_before": 4112784,
+      "cycles_after": 3655808
+    },
+    {
+      "iter": 23,
+      "action": "unfold",
+      "node": "MVAU_hls_3",
+      "PE": 2,
+      "SIMD": 9,
+      "style": "HLS_LUT",
+      "cycles_before": 3655808,
+      "cycles_after": 1827904
+    },
+    {
+      "iter": 24,
+      "action": "unfold",
+      "node": "MVAU_rtl_1",
+      "PE": 1,
+      "SIMD": 9,
+      "style": "RTL",
+      "cycles_before": 3115008,
+      "cycles_after": 2768896
+    },
+    {
+      "iter": 25,
+      "action": "unfold",
+      "node": "MVAU_hls_0",
+      "PE": 1,
+      "SIMD": 6,
+      "style": "HLS_LUT",
+      "cycles_before": 3115008,
+      "cycles_after": 2076672
+    },
+    {
+      "iter": 26,
+      "action": "unfold",
+      "node": "MVAU_rtl_2",
+      "PE": 1,
+      "SIMD": 6,
+      "style": "RTL",
+      "cycles_before": 3115008,
+      "cycles_after": 2076672
+    },
+    {
+      "iter": 27,
+      "action": "unfold",
+      "node": "MVAU_rtl_4",
+      "PE": 1,
+      "SIMD": 2,
+      "style": "RTL",
+      "cycles_before": 2847312,
+      "cycles_after": 1423656
+    },
+    {
+      "iter": 28,
+      "action": "unfold",
+      "node": "MVAU_rtl_1",
+      "PE": 2,
+      "SIMD": 9,
+      "style": "RTL",
+      "cycles_before": 2768896,
+      "cycles_after": 1384448
+    },
+    {
+      "iter": 29,
+      "action": "unfold",
+      "node": "MVAU_hls_1",
+      "PE": 4,
+      "SIMD": 2,
+      "style": "HLS_LUT",
+      "cycles_before": 2725632,
+      "cycles_after": 1362816
+    },
+    {
+      "iter": 30,
+      "action": "unfold",
+      "node": "MVAU_hls_2",
+      "PE": 4,
+      "SIMD": 2,
+      "style": "HLS_LUT",
+      "cycles_before": 2214576,
+      "cycles_after": 1107288
+    },
+    {
+      "iter": 31,
+      "action": "unfold",
+      "node": "MVAU_rtl_3",
+      "PE": 4,
+      "SIMD": 2,
+      "style": "RTL",
+      "cycles_before": 2214576,
+      "cycles_after": 1107288
+    },
+    {
+      "iter": 32,
+      "action": "unfold",
+      "node": "MVAU_hls_0",
+      "PE": 1,
+      "SIMD": 8,
+      "style": "HLS_LUT",
+      "cycles_before": 2076672,
+      "cycles_after": 1557504
+    },
+    {
+      "iter": 33,
+      "action": "unfold",
+      "node": "MVAU_rtl_2",
+      "PE": 1,
+      "SIMD": 8,
+      "style": "RTL",
+      "cycles_before": 2076672,
+      "cycles_after": 1557504
+    },
+    {
+      "iter": 34,
+      "action": "unfold",
+      "node": "MVAU_hls_4",
+      "PE": 1,
+      "SIMD": 2,
+      "style": "HLS_LUT",
+      "cycles_before": 1968512,
+      "cycles_after": 984256
+    },
+    {
+      "iter": 35,
+      "action": "unfold",
+      "node": "MVAU_hls_3",
+      "PE": 4,
+      "SIMD": 9,
+      "style": "HLS_LUT",
+      "cycles_before": 1827904,
+      "cycles_after": 913952
+    },
+    {
+      "iter": 36,
+      "action": "unfold",
+      "node": "MVAU_hls_0",
+      "PE": 1,
+      "SIMD": 9,
+      "style": "HLS_LUT",
+      "cycles_before": 1557504,
+      "cycles_after": 1384448
+    },
+    {
+      "iter": 37,
+      "action": "unfold",
+      "node": "MVAU_rtl_2",
+      "PE": 1,
+      "SIMD": 9,
+      "style": "RTL",
+      "cycles_before": 1557504,
+      "cycles_after": 1384448
+    },
+    {
+      "iter": 38,
+      "action": "unfold",
+      "node": "MVAU_rtl_4",
+      "PE": 1,
+      "SIMD": 3,
+      "style": "RTL",
+      "cycles_before": 1423656,
+      "cycles_after": 949104
+    },
+    {
+      "iter": 39,
+      "action": "unfold",
+      "node": "MVAU_rtl_0",
+      "PE": 2,
+      "SIMD": 27,
+      "style": "RTL",
+      "cycles_before": 1384448,
+      "cycles_after": 692224
+    },
+    {
+      "iter": 40,
+      "action": "unfold",
+      "node": "MVAU_rtl_1",
+      "PE": 4,
+      "SIMD": 9,
+      "style": "RTL",
+      "cycles_before": 1384448,
+      "cycles_after": 692224
+    },
+    {
+      "iter": 41,
+      "action": "unfold",
+      "node": "MVAU_hls_0",
+      "PE": 2,
+      "SIMD": 9,
+      "style": "HLS_LUT",
+      "cycles_before": 1384448,
+      "cycles_after": 692224
+    },
+    {
+      "iter": 42,
+      "action": "unfold",
+      "node": "MVAU_rtl_2",
+      "PE": 2,
+      "SIMD": 9,
+      "style": "RTL",
+      "cycles_before": 1384448,
+      "cycles_after": 692224
+    },
+    {
+      "iter": 43,
+      "action": "unfold",
+      "node": "MVAU_hls_1",
+      "PE": 4,
+      "SIMD": 3,
+      "style": "HLS_LUT",
+      "cycles_before": 1362816,
+      "cycles_after": 908544
+    },
+    {
+      "iter": 44,
+      "action": "unfold",
+      "node": "MVAU_hls_2",
+      "PE": 4,
+      "SIMD": 3,
+      "style": "HLS_LUT",
+      "cycles_before": 1107288,
+      "cycles_after": 738192
+    },
+    {
+      "iter": 45,
+      "action": "unfold",
+      "node": "MVAU_rtl_3",
+      "PE": 4,
+      "SIMD": 3,
+      "style": "RTL",
+      "cycles_before": 1107288,
+      "cycles_after": 738192
+    },
+    {
+      "iter": 46,
+      "action": "unfold",
+      "node": "MVAU_hls_4",
+      "PE": 1,
+      "SIMD": 4,
+      "style": "HLS_LUT",
+      "cycles_before": 984256,
+      "cycles_after": 492128
+    },
+    {
+      "iter": 47,
+      "action": "unfold",
+      "node": "MVAU_rtl_4",
+      "PE": 1,
+      "SIMD": 4,
+      "style": "RTL",
+      "cycles_before": 949104,
+      "cycles_after": 711828
+    },
+    {
+      "iter": 48,
+      "action": "unfold",
+      "node": "MVAU_hls_3",
+      "PE": 8,
+      "SIMD": 9,
+      "style": "HLS_LUT",
+      "cycles_before": 913952,
+      "cycles_after": 456976
+    },
+    {
+      "iter": 49,
+      "action": "unfold",
+      "node": "MVAU_hls_1",
+      "PE": 4,
+      "SIMD": 4,
+      "style": "HLS_LUT",
+      "cycles_before": 908544,
+      "cycles_after": 681408
+    },
+    {
+      "iter": 50,
+      "action": "unfold",
+      "node": "MVAU_hls_2",
+      "PE": 4,
+      "SIMD": 4,
+      "style": "HLS_LUT",
+      "cycles_before": 738192,
+      "cycles_after": 553644
+    },
+    {
+      "iter": 51,
+      "action": "unfold",
+      "node": "MVAU_rtl_3",
+      "PE": 4,
+      "SIMD": 4,
+      "style": "RTL",
+      "cycles_before": 738192,
+      "cycles_after": 553644
+    },
+    {
+      "iter": 52,
+      "action": "unfold",
+      "node": "MVAU_rtl_4",
+      "PE": 1,
+      "SIMD": 6,
+      "style": "RTL",
+      "cycles_before": 711828,
+      "cycles_after": 474552
+    },
+    {
+      "iter": 53,
+      "action": "unfold",
+      "node": "MVAU_rtl_0",
+      "PE": 4,
+      "SIMD": 27,
+      "style": "RTL",
+      "cycles_before": 692224,
+      "cycles_after": 346112
+    },
+    {
+      "iter": 54,
+      "action": "unfold",
+      "node": "MVAU_rtl_1",
+      "PE": 4,
+      "SIMD": 12,
+      "style": "RTL",
+      "cycles_before": 692224,
+      "cycles_after": 519168
+    },
+    {
+      "iter": 55,
+      "action": "unfold",
+      "node": "MVAU_hls_0",
+      "PE": 4,
+      "SIMD": 9,
+      "style": "HLS_LUT",
+      "cycles_before": 692224,
+      "cycles_after": 346112
+    },
+    {
+      "iter": 56,
+      "action": "unfold",
+      "node": "MVAU_rtl_2",
+      "PE": 4,
+      "SIMD": 9,
+      "style": "RTL",
+      "cycles_before": 692224,
+      "cycles_after": 346112
+    },
+    {
+      "iter": 57,
+      "action": "unfold",
+      "node": "MVAU_hls_1",
+      "PE": 4,
+      "SIMD": 6,
+      "style": "HLS_LUT",
+      "cycles_before": 681408,
+      "cycles_after": 454272
+    },
+    {
+      "iter": 58,
+      "action": "unfold",
+      "node": "MVAU_hls_2",
+      "PE": 4,
+      "SIMD": 6,
+      "style": "HLS_LUT",
+      "cycles_before": 553644,
+      "cycles_after": 369096
+    },
+    {
+      "iter": 59,
+      "action": "unfold",
+      "node": "MVAU_rtl_3",
+      "PE": 4,
+      "SIMD": 6,
+      "style": "RTL",
+      "cycles_before": 553644,
+      "cycles_after": 369096
+    },
+    {
+      "iter": 60,
+      "action": "unfold",
+      "node": "MVAU_rtl_1",
+      "PE": 4,
+      "SIMD": 18,
+      "style": "RTL",
+      "cycles_before": 519168,
+      "cycles_after": 346112
+    },
+    {
+      "iter": 61,
+      "action": "unfold",
+      "node": "MVAU_hls_4",
+      "PE": 1,
+      "SIMD": 8,
+      "style": "HLS_LUT",
+      "cycles_before": 492128,
+      "cycles_after": 246064
+    },
+    {
+      "iter": 62,
+      "action": "unfold",
+      "node": "MVAU_rtl_4",
+      "PE": 1,
+      "SIMD": 8,
+      "style": "RTL",
+      "cycles_before": 474552,
+      "cycles_after": 355914
+    },
+    {
+      "iter": 63,
+      "action": "unfold",
+      "node": "MVAU_hls_3",
+      "PE": 13,
+      "SIMD": 9,
+      "style": "HLS_LUT",
+      "cycles_before": 456976,
+      "cycles_after": 281216
+    },
+    {
+      "iter": 64,
+      "action": "unfold",
+      "node": "MVAU_hls_1",
+      "PE": 4,
+      "SIMD": 8,
+      "style": "HLS_LUT",
+      "cycles_before": 454272,
+      "cycles_after": 340704
+    },
+    {
+      "iter": 65,
+      "action": "unfold",
+      "node": "MVAU_hls_2",
+      "PE": 4,
+      "SIMD": 7,
+      "style": "HLS_LUT",
+      "cycles_before": 369096,
+      "cycles_after": 316368
+    },
+    {
+      "iter": 66,
+      "action": "unfold",
+      "node": "MVAU_rtl_3",
+      "PE": 4,
+      "SIMD": 7,
+      "style": "RTL",
+      "cycles_before": 369096,
+      "cycles_after": 316368
+    },
+    {
+      "iter": 67,
+      "action": "unfold",
+      "node": "MVAU_rtl_4",
+      "PE": 1,
+      "SIMD": 9,
+      "style": "RTL",
+      "cycles_before": 355914,
+      "cycles_after": 316368
+    },
+    {
+      "iter": 68,
+      "action": "unfold",
+      "node": "MVAU_rtl_0",
+      "PE": 8,
+      "SIMD": 27,
+      "style": "RTL",
+      "cycles_before": 346112,
+      "cycles_after": 173056
+    },
+    {
+      "iter": 69,
+      "action": "unfold",
+      "node": "MVAU_rtl_1",
+      "PE": 4,
+      "SIMD": 24,
+      "style": "RTL",
+      "cycles_before": 346112,
+      "cycles_after": 259584
+    },
+    {
+      "iter": 70,
+      "action": "unfold",
+      "node": "MVAU_hls_0",
+      "PE": 8,
+      "SIMD": 9,
+      "style": "HLS_LUT",
+      "cycles_before": 346112,
+      "cycles_after": 173056
+    },
+    {
+      "iter": 71,
+      "action": "unfold",
+      "node": "MVAU_rtl_2",
+      "PE": 8,
+      "SIMD": 9,
+      "style": "RTL",
+      "cycles_before": 346112,
+      "cycles_after": 173056
+    },
+    {
+      "iter": 72,
+      "action": "unfold",
+      "node": "MVAU_hls_1",
+      "PE": 4,
+      "SIMD": 9,
+      "style": "HLS_LUT",
+      "cycles_before": 340704,
+      "cycles_after": 302848
+    },
+    {
+      "iter": 73,
+      "action": "unfold",
+      "node": "MVAU_hls_2",
+      "PE": 4,
+      "SIMD": 8,
+      "style": "HLS_LUT",
+      "cycles_before": 316368,
+      "cycles_after": 276822
+    },
+    {
+      "iter": 74,
+      "action": "unfold",
+      "node": "MVAU_rtl_3",
+      "PE": 4,
+      "SIMD": 8,
+      "style": "RTL",
+      "cycles_before": 316368,
+      "cycles_after": 276822
+    },
+    {
+      "iter": 75,
+      "action": "unfold",
+      "node": "MVAU_rtl_4",
+      "PE": 1,
+      "SIMD": 12,
+      "style": "RTL",
+      "cycles_before": 316368,
+      "cycles_after": 237276
+    },
+    {
+      "iter": 76,
+      "action": "unfold",
+      "node": "MVAU_hls_1",
+      "PE": 7,
+      "SIMD": 9,
+      "style": "HLS_LUT",
+      "cycles_before": 302848,
+      "cycles_after": 173056
+    },
+    {
+      "iter": 77,
+      "action": "unfold",
+      "node": "MVAU_hls_3",
+      "PE": 16,
+      "SIMD": 9,
+      "style": "HLS_LUT",
+      "cycles_before": 281216,
+      "cycles_after": 228488
+    },
+    {
+      "iter": 78,
+      "action": "unfold",
+      "node": "MVAU_hls_2",
+      "PE": 4,
+      "SIMD": 9,
+      "style": "HLS_LUT",
+      "cycles_before": 276822,
+      "cycles_after": 246064
+    },
+    {
+      "iter": 79,
+      "action": "unfold",
+      "node": "MVAU_rtl_3",
+      "PE": 4,
+      "SIMD": 9,
+      "style": "RTL",
+      "cycles_before": 276822,
+      "cycles_after": 246064
+    },
+    {
+      "iter": 80,
+      "action": "unfold",
+      "node": "MVAU_rtl_1",
+      "PE": 4,
+      "SIMD": 36,
+      "style": "RTL",
+      "cycles_before": 259584,
+      "cycles_after": 173056
+    },
+    {
+      "iter": 81,
+      "action": "unfold",
+      "node": "MVAU_hls_2",
+      "PE": 8,
+      "SIMD": 9,
+      "style": "HLS_LUT",
+      "cycles_before": 246064,
+      "cycles_after": 123032
+    },
+    {
+      "iter": 82,
+      "action": "unfold",
+      "node": "MVAU_hls_4",
+      "PE": 2,
+      "SIMD": 8,
+      "style": "HLS_LUT",
+      "cycles_before": 246064,
+      "cycles_after": 123032
+    },
+    {
+      "iter": 83,
+      "action": "unfold",
+      "node": "MVAU_rtl_3",
+      "PE": 8,
+      "SIMD": 9,
+      "style": "RTL",
+      "cycles_before": 246064,
+      "cycles_after": 123032
+    },
+    {
+      "iter": 84,
+      "action": "unfold",
+      "node": "MVAU_rtl_4",
+      "PE": 1,
+      "SIMD": 13,
+      "style": "RTL",
+      "cycles_before": 237276,
+      "cycles_after": 219024
+    },
+    {
+      "iter": 85,
+      "action": "unfold",
+      "node": "MVAU_hls_3",
+      "PE": 26,
+      "SIMD": 9,
+      "style": "HLS_LUT",
+      "cycles_before": 228488,
+      "cycles_after": 140608
+    },
+    {
+      "iter": 86,
+      "action": "unfold",
+      "node": "MVAU_rtl_4",
+      "PE": 1,
+      "SIMD": 18,
+      "style": "RTL",
+      "cycles_before": 219024,
+      "cycles_after": 158184
+    },
+    {
+      "iter": 87,
+      "action": "balanced",
+      "floor": 216320,
+      "floor_node": "StreamingMaxPool_L2"
+    }
+  ]
+}

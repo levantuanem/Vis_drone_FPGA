@@ -1,0 +1,43 @@
+# T1.2 baseline -- UNPRUNED stock YOLOv3-Tiny, FP32, BOTH detection branches.
+#
+# PAPER FACT: Table 5's left column is "YOLOv3-Tiny Original" at 416x416 on the
+# same single-class VisDrone car dataset (P 67.06 / R 38.44 / mAP@0.5 41.76).
+# The paper does not restate the stock architecture, so this file is the
+# conventional YOLOv3-Tiny definition.
+#
+# OUR ASSUMPTION: the stock YOLOv3-Tiny anchor set and branch assignment are used
+# for this baseline (the repository's single-branch anchors apply only to the
+# pruned model). Recorded in DECISIONS.md.
+
+nc: 1
+names: ['car']
+img_size: 416
+
+# stock YOLOv3-Tiny anchors; mask 3,4,5 on the 13x13 branch, 0,1,2 on 26x26
+anchors:
+  - [10, 14, 23, 27, 37, 58]        # stride 16 branch (26x26)
+  - [81, 82, 135, 169, 344, 319]    # stride 32 branch (13x13)
+strides: [16, 32]
+
+backbone:
+  - [conv,    3,   16, 3, 1, same]
+  - [maxpool, 16,  16, 2, 2, valid]
+  - [conv,    16,  32, 3, 1, same]
+  - [maxpool, 32,  32, 2, 2, valid]
+  - [conv,    32,  64, 3, 1, same]
+  - [maxpool, 64,  64, 2, 2, valid]
+  - [conv,    64, 128, 3, 1, same]
+  - [maxpool, 128,128, 2, 2, valid]
+  - [conv,   128, 256, 3, 1, same]    # -> route to the 26x26 branch
+  - [maxpool, 256,256, 2, 2, valid]
+  - [conv,   256, 512, 3, 1, same]
+  - [maxpool, 512,512, 2, 1, same]    # stock stride-1 pool (cf. D2)
+  - [conv,   512,1024, 3, 1, same]
+
+head:
+  - [conv,  1024, 256, 1, 1, valid]
+  - [conv,   256, 512, 3, 1, same]
+  - [detect, 512,  18, 1, 1, valid, 13]     # 13x13 branch
+  - [upsample_concat, 256, 384]             # REMOVED in the pruned model
+  - [conv,   384, 256, 3, 1, same]
+  - [detect, 256,  18, 1, 1, valid, 26]     # 26x26 branch

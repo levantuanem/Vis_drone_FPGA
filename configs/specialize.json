@@ -1,0 +1,132 @@
+{
+  "_provenance": {
+    "classification": "PAPER FACT",
+    "source": "paper Table 6 MVU instance names, verified against Table 1 by weight count",
+    "note": "FINN instance naming encodes the backend (MVAU_rtl_* vs MVAU_hls_*). Each instance's weight count matches exactly one Table 1 layer via k^2*Cin*Cout, with no collisions, so the mapping is unambiguous.",
+    "result": "5 RTL + 5 HLS",
+    "applied_by": "finn_build/step_02_folding.py via FINN ApplyConfig",
+    "caveat": "SpecializeLayers defaults to RTL where available (PAPER FACT 3.5), so HLS choices MUST be applied explicitly."
+  },
+  "layers": {
+    "MVAU_rtl_0": {
+      "table1_row": 1,
+      "conv_index": 1,
+      "preferred_impl_style": "rtl",
+      "cin": 3,
+      "cout": 8,
+      "kernel": 3,
+      "weights": 216,
+      "macs": 37380096,
+      "dtype_pair": "8b-8b",
+      "dsp_pack_factor_table4": 2
+    },
+    "MVAU_rtl_1": {
+      "table1_row": 3,
+      "conv_index": 2,
+      "preferred_impl_style": "rtl",
+      "cin": 8,
+      "cout": 8,
+      "kernel": 3,
+      "weights": 576,
+      "macs": 24920064,
+      "dtype_pair": "4b-4b",
+      "dsp_pack_factor_table4": 4
+    },
+    "MVAU_hls_0": {
+      "table1_row": 5,
+      "conv_index": 3,
+      "preferred_impl_style": "hls",
+      "cin": 8,
+      "cout": 16,
+      "kernel": 3,
+      "weights": 1152,
+      "macs": 12460032,
+      "dtype_pair": "4b-4b",
+      "dsp_pack_factor_table4": 1
+    },
+    "MVAU_rtl_2": {
+      "table1_row": 7,
+      "conv_index": 4,
+      "preferred_impl_style": "rtl",
+      "cin": 16,
+      "cout": 32,
+      "kernel": 3,
+      "weights": 4608,
+      "macs": 12460032,
+      "dtype_pair": "4b-4b",
+      "dsp_pack_factor_table4": 4
+    },
+    "MVAU_hls_1": {
+      "table1_row": 9,
+      "conv_index": 5,
+      "preferred_impl_style": "hls",
+      "cin": 32,
+      "cout": 56,
+      "kernel": 3,
+      "weights": 16128,
+      "macs": 10902528,
+      "dtype_pair": "4b-4b",
+      "dsp_pack_factor_table4": 1
+    },
+    "MVAU_hls_2": {
+      "table1_row": 11,
+      "conv_index": 6,
+      "preferred_impl_style": "hls",
+      "cin": 56,
+      "cout": 104,
+      "kernel": 3,
+      "weights": 52416,
+      "macs": 8858304,
+      "dtype_pair": "4b-4b",
+      "dsp_pack_factor_table4": 1
+    },
+    "MVAU_hls_3": {
+      "table1_row": 13,
+      "conv_index": 7,
+      "preferred_impl_style": "hls",
+      "cin": 104,
+      "cout": 208,
+      "kernel": 3,
+      "weights": 194688,
+      "macs": 32902272,
+      "dtype_pair": "4b-4b",
+      "dsp_pack_factor_table4": 1
+    },
+    "MVAU_hls_4": {
+      "table1_row": 14,
+      "conv_index": 8,
+      "preferred_impl_style": "hls",
+      "cin": 208,
+      "cout": 56,
+      "kernel": 1,
+      "weights": 11648,
+      "macs": 1968512,
+      "dtype_pair": "4b-4b",
+      "dsp_pack_factor_table4": 1
+    },
+    "MVAU_rtl_3": {
+      "table1_row": 15,
+      "conv_index": 9,
+      "preferred_impl_style": "rtl",
+      "cin": 56,
+      "cout": 104,
+      "kernel": 3,
+      "weights": 52416,
+      "macs": 8858304,
+      "dtype_pair": "4b-4b",
+      "dsp_pack_factor_table4": 4
+    },
+    "MVAU_rtl_4": {
+      "table1_row": 16,
+      "conv_index": 10,
+      "preferred_impl_style": "rtl",
+      "cin": 104,
+      "cout": 18,
+      "kernel": 3,
+      "weights": 16848,
+      "macs": 2847312,
+      "dtype_pair": "4b-8b",
+      "dsp_pack_factor_table4": 2
+    }
+  }
+}

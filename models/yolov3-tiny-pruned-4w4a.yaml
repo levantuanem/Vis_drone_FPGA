@@ -1,0 +1,40 @@
+# T1.3 target topology -- PAPER FACT Table 1 (authoritative).
+#
+# This file is DOCUMENTATION of the architecture that models/arch_spec.py defines
+# in code. arch_spec is the single source of truth; tests/test_arch_spec.py
+# asserts the two agree, so they cannot drift.
+#
+# Resolutions applied (see final_implementation_spec.md section 18):
+#   P1  channel widths from Table 1, NOT the "factor of 5" prose
+#   P2  row 12 MaxPool stride 1 (Table 1 prints 2 - impossible)   DECISION D2
+#   P3  row 16 kernel 3x3, not stock YOLOv3-Tiny's 1x1
+#   P11 row 16 output activation INT8, not INT4
+#
+# Structural removals -- PAPER FACT 3.1:
+#   detect head detached at export; ALL upsample and concat layers removed
+#   (FINN cannot map branched topologies) -> single 13x13 detection branch.
+
+nc: 1
+names: ['car']
+img_size: 416
+detect_stride: 32                 # REPOSITORY FACT infer_client_v3.py:25
+anchors: [[10, 14], [23, 27], [37, 58]]   # REPOSITORY FACT - paper is silent
+
+# row | type    | cin | cout | k | s | pad   | act            | w_bits | impl | mvu
+layers:
+  - [1,  conv,    3,    8,   3,  1, same,  QuantReLU,      8, RTL, MVAU_rtl_0]
+  - [2,  maxpool, 8,    8,   2,  2, valid, null,        null, HLS, null]
+  - [3,  conv,    8,    8,   3,  1, same,  QuantReLU,      4, RTL, MVAU_rtl_1]
+  - [4,  maxpool, 8,    8,   2,  2, valid, null,        null, HLS, null]
+  - [5,  conv,    8,   16,   3,  1, same,  QuantReLU,      4, HLS, MVAU_hls_0]
+  - [6,  maxpool, 16,  16,   2,  2, valid, null,        null, HLS, null]
+  - [7,  conv,    16,  32,   3,  1, same,  QuantReLU,      4, RTL, MVAU_rtl_2]
+  - [8,  maxpool, 32,  32,   2,  2, valid, null,        null, HLS, null]
+  - [9,  conv,    32,  56,   3,  1, same,  QuantReLU,      4, HLS, MVAU_hls_1]
+  - [10, maxpool, 56,  56,   2,  2, valid, null,        null, HLS, null]
+  - [11, conv,    56, 104,   3,  1, same,  QuantReLU,      4, HLS, MVAU_hls_2]
+  - [12, maxpool, 104, 104,  2,  1, same,  null,        null, HLS, null]   # D2
+  - [13, conv,   104, 208,   3,  1, same,  QuantReLU,      4, HLS, MVAU_hls_3]
+  - [14, conv,   208,  56,   1,  1, valid, QuantReLU,      4, HLS, MVAU_hls_4]
+  - [15, conv,    56, 104,   3,  1, same,  QuantReLU,      4, RTL, MVAU_rtl_3]
+  - [16, conv,   104,  18,   3,  1, same,  QuantHardTanh,  8, RTL, MVAU_rtl_4]

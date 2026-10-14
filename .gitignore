@@ -1,0 +1,28 @@
+# datasets & weights (never committed)
+/datasets/
+/visdrone_car/
+*.pt
+*.onnx
+*.tflite
+*.bit
+*.hwh
+*.fnn
+*.npy
+# build outputs
+/finn_build_out/
+/runs/
+/results/**
+!/results/.gitkeep
+# python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+# editors / os
+.vscode/
+.idea/
+.DS_Store
+# the reference clone must never land in the project tree
+/ref_repo/
+# the reference paper is publisher-copyrighted, keep it local only
+*.pdf

@@ -1,0 +1,11 @@
+# Tier 2 board-side environment (runs ON the Zynq PS, not on this host).
+# HARDWARE BLOCKER: D9 PENDING -- no Z-turn Board V2 present. NOT INSTALLED.
+#
+# The board needs a PYNQ image on micro-SD. The FINN-generated driver
+# (driver.py / driver_base.py, produced by T1.9 step 04) must sit alongside
+# streamer/server.py.
+
+numpy
+websockets
+# pynq        <- comes with the PYNQ image; do not pip-install over it
+# opencv-python  (optional, only if postprocessing runs on the PS)

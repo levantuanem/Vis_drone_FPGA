@@ -1,0 +1,47 @@
+# Training hyper-parameters -- DECISION D4 / OUR ASSUMPTION A5.
+#
+# PAPER FACT: Table 3 gives exactly five values (epochs 300, batch 64,
+#   img 416x416, optimizer SGD, patience 30). Section 3.1.4 adds only
+#   "Standard low-scratch hyper-parameters were used".
+# "low-scratch" is the filename stem of Ultralytics' low-augmentation
+#   from-scratch preset (data/hyps/hyp.scratch-low.yaml). The paper never names
+#   the file, so adopting it is an assumption, not a fact.
+# VENDORED AND FROZEN deliberately: the upstream file's contents have changed
+#   across YOLOv5 releases, so a floating reference would make even our own
+#   results irreproducible.
+#
+# upstream_reference: ultralytics/yolov5 data/hyps/hyp.scratch-low.yaml
+# upstream_release_tag: TO BE RECORDED when the file is first fetched (A5)
+#
+# NOTE: the values below are the conventional low-augmentation preset. They are
+# OUR ASSUMPTION. On first setup, diff this file against the pinned upstream tag
+# and record any difference in DECISIONS.md rather than editing silently.
+
+lr0: 0.01            # initial learning rate (SGD)
+lrf: 0.01            # final OneCycle LR fraction
+momentum: 0.937
+weight_decay: 0.0005
+warmup_epochs: 3.0
+warmup_momentum: 0.8
+warmup_bias_lr: 0.1
+box: 0.05            # box loss gain
+obj: 1.0             # objectness loss gain
+cls: 0.5             # class loss gain (inert: nc == 1)
+cls_pw: 1.0
+obj_pw: 1.0
+iou_t: 0.20
+anchor_t: 4.0
+fl_gamma: 0.0
+hsv_h: 0.015
+hsv_s: 0.7
+hsv_v: 0.4
+degrees: 0.0
+translate: 0.1
+scale: 0.5
+shear: 0.0
+perspective: 0.0
+flipud: 0.0
+fliplr: 0.5
+mosaic: 1.0
+mixup: 0.0
+copy_paste: 0.0

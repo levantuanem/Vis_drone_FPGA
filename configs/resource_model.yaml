@@ -1,0 +1,45 @@
+# Resource-model parameters for tools/cycle_model.py
+#
+# CLASSIFICATION SUMMARY
+#   DSP packing      PAPER FACT      paper Table 4 - exact, trustworthy
+#   cycle counts     DERIVED FACT    verified against paper Table 8 - exact
+#   LUT estimates    OUR ASSUMPTION  provisional, calibrate against Table 7
+#   BRAM estimates   OUR ASSUMPTION  provisional, calibrate against Table 7
+#
+# Calibration procedure (after T1.9 produces a real Vivado report):
+#   1. run tools/parse_vivado_reports.py to extract actual LUT / DSP / BRAM
+#   2. adjust lut_per_mac_hls_lut and lutram_bit_threshold until the model's
+#      prediction matches paper-Table-7-equivalent actuals for OUR design
+#   3. re-run tools/folding_search.py and re-synthesise
+# Until step 3 completes, configs/folding.json stays marked PROVISIONAL.
+
+dsp_packing:                    # PAPER FACT Table 4 (DSP48E1)
+  act_4b_weight_4b: 4           # MAC per DSP
+  act_or_weight_gt_4b: 2
+  hls_dsp_style: 1
+
+device_budget:                  # PAPER FACT paper section 3
+  lut: 53200
+  dsp48e1: 220
+  bram18k: 140
+
+budget_fraction: 0.95           # OUR ASSUMPTION A23 ("reasonable resource limits")
+
+lut_model:                      # OUR ASSUMPTION - provisional
+  lut_per_mac_hls_lut: 14.0
+  lut_per_node_overhead: 180.0
+  lut_per_lutram_bit: 0.015625  # 1/64, SLICEM distributed RAM
+
+bram_model:                     # OUR ASSUMPTION - provisional
+  bram18k_bits: 18432           # hardware fact (Xilinx 7-series)
+  bram18k_max_width: 36         # hardware fact (single-port width limit)
+  bram18k_max_depth: 16384      # hardware fact
+  lutram_bit_threshold: 1024    # OUR ASSUMPTION - below this, map to LUTRAM
+
+reference_targets:              # PAPER FACT Table 7 "Actual" - context, not goals
+  bram18k: 138
+  lut: 41605
+  dsp: 204
+  bram18k_finn_estimate: 200
+  lut_finn_estimate: 26694
+  dsp_finn_estimate: 202
