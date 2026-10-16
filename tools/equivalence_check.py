@@ -1,26 +1,4 @@
 #!/usr/bin/env python3
-"""T1.12 -- functional equivalence PyTorch <-> QONNX <-> cppsim <-> rtlsim.
-
-OUR ADDITION. The paper has no quantitative counterpart: 4.2.2 states only that
-RTL simulation "confirmed the correct working of the implemented system", with no
-evidence, and the repository's `validate.py` is unmodified FINN MNIST/CIFAR-10
-boilerplate. Nothing in either source demonstrates that the FPGA computes the
-trained function.
-
-THIS IS A GATE: Tier 2 must not begin until it passes. Deploying a model we have
-not proven correct would make every hardware measurement uninterpretable.
-
-Acceptance:
-  QONNX vs cppsim vs rtlsim   EXACT integer equality
-  Brevitas vs QONNX           within export rounding only (A31)
-  mAP@0.5 delta Brevitas->rtlsim  ~ 0
-
-Post-processing applied at every level is identical and comes from
-utils/postprocess.py, so a divergence can only be in the compiled network.
-
-DEPENDENCIES NOT INSTALLED: torch, brevitas, FINN 0.10, Verilator. NOT RUN.
-"""
-
 import argparse
 import json
 import os

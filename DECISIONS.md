@@ -40,7 +40,7 @@ file records **what the code actually does**, with the file that does it.
 | A8 | seed 0 | `train.py --seed` |
 | A9 | Coral uses pruned topology | `tools/export_tflite.py` |
 | A10–A14, A16 | quantiser details | `configs/quant.yaml`, `models/quant_common.py` |
-| **A15** | **BatchNorm OFF — highest risk** | `configs/quant.yaml`, `train.py --batchnorm` ablation flag |
+| **A15** | **BatchNorm ON since 2026-10-16 (was OFF) — highest risk** | `configs/quant.yaml`, `train.py --no-batchnorm` ablation flag |
 | A17 | QAT from scratch | `configs/quant.yaml` |
 | A18, A19 | export API / opset | `export.py`, `configs/quant.yaml` |
 | A20 | tidy-up pass list | `finn_build/step_01_frontend.py` manifest |
@@ -110,3 +110,79 @@ file records **what the code actually does**, with the file that does it.
   files (`--verify-index`) before the first training run.
 - **A19** — ONNX opset is pinned to 13 in `configs/quant.yaml`; revisit if the
   brevitas 0.9.0 / FINN 0.10 pair disagrees.
+
+### 2026-10-15 — evaluation fixes before the first training run
+
+- **Single-class confidence.** `utils/postprocess.non_max_suppression` now uses
+  objectness alone when `nc == 1`. The class channel receives no gradient
+  (`utils/loss.py`), so `obj * cls` scaled every score by an untrained value
+  and could drop a perfect detection entirely.
+- **Evaluation thresholds separated from deployment thresholds.** `train.py`
+  evaluates with `EVAL_CONF_THRES=0.001`, `EVAL_IOU_THRES=0.6`,
+  `EVAL_MAX_DET=300` (**OUR ASSUMPTION**: Ultralytics `val.py` defaults). The
+  REPOSITORY FACT values (0.10 / 0.10 / 20) stay the defaults for deployment,
+  where the 20-box cap is real; applied to mAP they truncated recall.
+- **P/R reported at max F1** in `utils/metrics.evaluate`, as Ultralytics
+  `val.py` does (unsmoothed here), instead of at the lowest confidence kept.
+  `tests/test_postprocess.py` pins all three.
+- **Final activation uses a constant 1/127 scale.** `models/quant_common.ActQuantSigned`
+  was brevitas `Int8ActPerTensorFloat`, whose scale is learned from runtime
+  statistics, so the PS-side dequant `Mul` would have been whatever training
+  chose rather than the REPOSITORY FACT 1/127 that `utils/postprocess.py`
+  hard-codes. It is now `Int8ActPerTensorFloatMinMaxInit` with
+  `scaling_impl_type=CONST`, `narrow_range=True`, `max_val=1.0`; brevitas 0.9.0
+  forms a narrow signed scale as `max_val / 127`, giving exactly 1/127.
+  Recorded in `configs/quant.yaml` as `act_hardtanh_scaling`.
+
+### 2026-10-16 — dataset converted, A1 verified, A15 flipped to BatchNorm ON
+
+- **Dataset (T1.1).** VisDrone2019-DET train + val converted by
+  `tools/visdrone_to_yolo.py --verify-index` into `/mnt/data10tb/visdrone_car`
+  (images are symlinks into `/mnt/data10tb/visdrone_raw`; manifest in
+  `manifest.json` there). train: 6,471 images, 144,866 car boxes; val: 548
+  images, 14,064 car boxes. test-dev not downloaded.
+- **A1 VERIFIED.** Category id 4 is `car` in both splits (144,867 / 14,064
+  boxes before filtering). The annotations also contain id 11 (`others`,
+  1,532 / 32 boxes), which `VISDRONE_CATEGORIES` does not name; it is dropped
+  with the other non-car classes.
+- **A15 flipped: BatchNorm is now ON** (`configs/quant.yaml`
+  `structure.batchnorm: true`). Measured before the first training run: with
+  BN off, the activations are small enough at the last conv that the
+  constant-1/127 `QuantHardTanh` rounds every output to exactly 0 (all ReLU
+  layers are alive in train mode; only conv10 collapses). An overfit probe on
+  8 fixed train images, 150 SGD steps at `lr0`, seed 0:
+
+  | | loss @ 0 | loss @ 150 | final output |
+  |---|---|---|---|
+  | BN off | 1.0104 | 1.0104 (unchanged) | all zeros |
+  | BN on  | 1.5213 | 0.0502 | std ≈ 0.49 |
+
+  The BN-free network cannot leave the all-zero state, so a full run would
+  early-stop at mAP ≈ 0. The hardware is unaffected: FINN absorbs BN into
+  MultiThreshold during streamlining. `train.py --no-batchnorm` remains as the
+  ablation. `tools/export_tflite.py` now infers BN from the checkpoint's keys
+  instead of hard-coding it off.
+- **Environment.** brevitas 0.9.0 imports `pkg_resources`, which setuptools 84
+  no longer ships; `.env` pinned to `setuptools==69.5.1`, recorded as
+  `setuptools<81` in `requirements/train.requirements.txt`.
+
+#### Still open
+
+- `train.py --fp32` only changes the printed title; it still builds the
+  quantised model, so T1.2 has no real FP32 baseline yet.
+
+### 2026-10-16 — `train.py --resume`
+
+- `train.py` writes `last.pt` every epoch (model, optimizer, OneCycleLR state,
+  epoch, best mAP, patience counter, history, RNG states; tmp + rename so a
+  kill mid-write cannot truncate it) and rewrites `results.json` every epoch.
+  `--resume runs/<name>/last.pt` continues from the next epoch and refuses to
+  run if `--epochs`/`--batch-size`/`--img` differ from the original, since
+  they fix the LR schedule. Starting a fresh run into a directory that already
+  holds `last.pt` is refused. `best.pt` keeps its previous format.
+- Verified on a 256/64-image subset, 4 epochs: a run killed with SIGINT during
+  epoch 2 and resumed tracks the uninterrupted run to within the GPU
+  run-to-run noise (box loss 1.170 vs 1.179, 1.062 vs 1.039; two fresh runs
+  differ by about as much at epoch 0, so this is not bit-exact).
+- Measured at batch 64 / 416: about 4.3 GB of GPU memory per `nvidia-smi`
+  (3.3 GB allocated by PyTorch), about 2.6 min of training per epoch.

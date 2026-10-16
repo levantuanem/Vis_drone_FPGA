@@ -1,31 +1,4 @@
 #!/usr/bin/env python3
-"""T1.13 -- FP32 -> TFLite INT8 PTQ, for the Coral comparison. Host-only.
-
-PAPER FACT 3.3 in full: "another training run was performed, this time with full
-FP32 precision. Then, a tflite model was exported with int8 PTQ precision. This
-tflite model was then compiled by the edgetpu compiler." A newer,
-community-maintained `libedgetpu` is required (PAPER FACT ref 68).
-
-CRITICAL AMBIGUITY -- DECISION D5 / A9: the paper never states whether that FP32
-run used the PRUNED Table-1 topology or stock YOLOv3-Tiny. We use the PRUNED
-topology so both platforms execute the identical network. If the authors used
-stock YOLOv3-Tiny, their Table 15 compares two different workloads. Flagged, not
-hidden.
-
-NOTE: this is INT8 **PTQ**, not the 4W4A **QAT** used for the FPGA. Table 15
-therefore compares two different quantisations of the same architecture. The
-paper does not flag this; we do.
-
-OUR ADDITION I8: report the Edge TPU compiler's op-mapping fraction -- ops falling
-back to the CPU would materially change T3.1 and the paper never reports it.
-
-OUR ASSUMPTIONS: PTQ scheme = full-integer; calibration set = N frames from the
-train split; conversion route PyTorch -> ONNX -> TF -> TFLite. All recorded.
-
-DEPENDENCIES NOT INSTALLED: tensorflow, onnx-tf (or ai-edge-torch), onnx. NOT RUN.
-Requires NO Coral device -- only T3.1 does.
-"""
-
 import argparse
 import json
 import os
@@ -100,9 +73,11 @@ def main(argv=None):
     if not onnx_path:
         import torch
         from models.quant_yolov3_tiny import build as build_quant
-        model = build_quant(None, batchnorm=False)
         ckpt = torch.load(args.weights, map_location="cpu")
-        model.load_state_dict(ckpt["model"] if "model" in ckpt else ckpt)
+        state = ckpt["model"] if "model" in ckpt else ckpt
+        # A15: follow whatever the checkpoint was trained with
+        model = build_quant(None, batchnorm=any(".bn." in k for k in state))
+        model.load_state_dict(state)
         model.eval()
         onnx_path = os.path.splitext(args.out)[0] + "_fp32.onnx"
         torch.onnx.export(model, torch.zeros(1, 3, args.img, args.img), onnx_path,

@@ -1,13 +1,3 @@
-"""Pruned, quantised YOLOv3-Tiny -- paper Table 1 (T1.3).
-
-The architecture is NOT redefined here. It is read from `models.arch_spec`, which
-is the single source of truth and is validated by tools/table6_selfcheck.py.
-That guarantees the trained network and the Table 6 arithmetic gate can never
-drift apart.
-
-DEPENDENCY NOT INSTALLED: torch==1.13.1, brevitas==0.9.0 (PAPER FACT Table 2).
-"""
-
 from __future__ import absolute_import
 
 import os

@@ -1,31 +1,4 @@
 #!/usr/bin/env python3
-"""T3.1 -- Coral Edge TPU benchmark. HARDWARE BLOCKER: D9 PENDING (no Coral).
-
-PAPER FACT 5.1: two driver configurations, `libedgetpu` standard mode and max
-mode; internal frequencies 250 MHz and 500 MHz; batch size 1 on BOTH sides "to
-allow for a fair comparison, at the cost of degraded performance for this work".
-PAPER FACT Table 15: 9.69 ms / 103.2 FPS at 250 MHz; 6.73 ms / 148.7 FPS at
-500 MHz; power 1.2 W / 2.4 W.
-
-TWO THINGS THE PAPER ITSELF FLAGS OR IMPLIES, CARRIED FORWARD HERE:
-  - The Coral power figures are DATASHEET ESTIMATES, not measurements; the 1.2 W
-    value is obtained by halving 2.4 W for half frequency (the paper's own
-    footnote says so). OUR ADDITION I3: measure Coral power on the same 5 V bench
-    used in T2.3, making the comparison symmetric.
-  - On the paper's own numbers the Coral at 250 MHz is MORE efficient
-    (86.0 vs 64.5 FPS/W) than this work. The paper's efficiency claim is against
-    FPGA literature (Table 16), not against the ASIC.
-
-OUR ASSUMPTION A9 / DECISION D5: the Coral runs the PRUNED Table-1 topology, so
-both platforms execute the identical network. The paper never states which
-topology its FP32 run used.
-OUR ADDITION I8: report the Edge TPU compiler's op-mapping fraction -- ops falling
-back to the CPU would materially change this result and the paper never reports it.
-
-DEPENDENCIES NOT INSTALLED: tflite-runtime / pycoral, libedgetpu (feranick fork,
-PAPER FACT ref 68). NOT RUN.
-"""
-
 import argparse
 import json
 import os

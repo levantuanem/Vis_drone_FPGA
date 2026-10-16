@@ -1,14 +1,4 @@
 #!/usr/bin/env python3
-"""Dataset statistics (T1.1) -- no paper counterpart; OUR ADDITION.
-
-Reports image/box counts and the box-size distribution. The size histogram is
-what justifies (or challenges) the REPOSITORY FACT anchor set
-(10,14), (23,27), (37,58) at stride 32 -- an anchor/target mismatch would show up
-here before any training time is spent.
-
-Reads only the converted dataset produced by tools/visdrone_to_yolo.py.
-"""
-
 import argparse
 import json
 import os

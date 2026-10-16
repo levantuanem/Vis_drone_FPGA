@@ -22,10 +22,17 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from models import arch_spec as A        # noqa: E402  stdlib-only
 from utils.boxes import nms, scale_coords, xywh2xyxy   # noqa: E402
 
-# REPOSITORY FACT infer_client_v3.py:342
+# REPOSITORY FACT infer_client_v3.py:342 -- the DEPLOYMENT thresholds.
 DEFAULT_CONF_THRES = 0.10
 DEFAULT_IOU_THRES = 0.10
 DEFAULT_MAX_DET = 20
+
+# OUR ASSUMPTION: the EVALUATION thresholds are Ultralytics val.py's defaults.
+# The deployment cap of 20 boxes would truncate recall on VisDrone, whose images
+# routinely hold more cars than that, so mAP must not be computed with it.
+EVAL_CONF_THRES = 0.001
+EVAL_IOU_THRES = 0.6
+EVAL_MAX_DET = 300
 
 
 def dequantise(out_int8, scale=A.OUTPUT_DEQUANT_SCALE):
@@ -87,7 +94,9 @@ def non_max_suppression(pred, conf_thres=DEFAULT_CONF_THRES,
     for p in pred:
         obj = p[:, 4]
         cls_scores = p[:, 5:]
-        if cls_scores.shape[1] == 0:
+        if cls_scores.shape[1] <= 1:
+            # nc == 1: the class channel receives no gradient (utils/loss.py),
+            # so multiplying by it would scale obj by an untrained value.
             conf = obj
             cls_idx = np.zeros(len(p), dtype=np.int64)
         else:

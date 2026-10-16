@@ -1,33 +1,4 @@
 #!/usr/bin/env python3
-"""T2.1 -- on-board throughput sweep. HARDWARE BLOCKER: D9 PENDING.
-
-BINDING METHODOLOGICAL CONSTRAINT (REPOSITORY FACT driver_base.py:421-448):
-`throughput_test()` times ONLY `execute_on_buffers()`, with buffers already
-resident in DRAM:
-
-    start = time(); self.execute_on_buffers(); end = time()
-    res["throughput[images/s]"] = self.batch_size / (end - start)
-
-`fold_input`, `pack_input`, `copy_input_data_to_device`,
-`copy_output_data_from_device`, `unpack_output` and `unfold_output` are timed
-SEPARATELY and EXCLUDED. Therefore paper Table 9's FPS is a fabric+DMA figure,
-NOT end-to-end. This script reproduces that definition exactly -- otherwise the
-numbers are not comparable to the paper's.
-
-PAPER FACT 4.2.6: clocks {50, 100, 200} MHz; batch {1, 100}; random data fed
-directly via DRAM "avoiding unnecessary data reshaping and repacking".
-
-OUR ADDITION A32/I2: >=10 repetitions, reported as mean +/- sigma. The paper
-reports bare single values with no dispersion.
-
-CORROBORATION WARNING (spec P12): the repository's only committed measurement
-(nw_metrics.txt: 23.49 FPS @100 MHz, batch 10) is ~4.4x below Table 9 and was
-produced with `resizer.bit`, a DIFFERENT bitstream from `visdrone.bit`. Table 9 is
-therefore single-source and uncorroborated.
-
-DEPENDENCIES NOT INSTALLED: pynq (board-side). NOT RUN.
-"""
-
 import argparse
 import json
 import math

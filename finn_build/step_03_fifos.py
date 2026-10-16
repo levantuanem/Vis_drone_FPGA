@@ -1,27 +1,4 @@
 #!/usr/bin/env python3
-"""T1.7 -- FIFO depth characterisation.
-
-PAPER FACT 3.7: FIFOs absorb per-layer rate mismatch; "excessively short FIFOs
-result in a high percentage of layer stalling, while overly long FIFOs
-unnecessarily waste resources".
-PAPER FACT 3.7.1: depths are determined by RTL simulation with `pyverilator`.
-
-OUR ASSUMPTION A24: the depths themselves are DERIVED here, because paper 3.7.2
-delegates them to a repository that does not contain them (spec P7).
-OUR ASSUMPTION A25: FINN's automated characterisation first, then hand-tune only
-nodes that still stall.
-OUR ASSUMPTION A26: the stall-acceptance threshold is recorded in the output.
-OUR ASSUMPTION A27: waveform tracing is DISABLED -- VCD over millions of cycles
-is infeasible on this host's 15 GB RAM.
-
-ALSO TESTS A PAPER CLAIM (spec P8): paper 3.7.2 reports the HLS StreamingMaxPool
-at ~570,000 cycles against a predicted 216,320 (~2.6x), while Table 8 reports the
-RTLSim max node at 741,670. Those two figures disagree. This step records what we
-measure and flags the discrepancy rather than reconciling it.
-
-DEPENDENCY NOT INSTALLED: FINN 0.10, Verilator, pyverilator. NOT RUN in this phase.
-"""
-
 import argparse
 import json
 import os

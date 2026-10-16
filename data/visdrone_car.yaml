@@ -1,14 +1,3 @@
-# VisDrone2019-DET, single class "car" -- DECISION D6 (PAPER-DETERMINED).
-#
-# PAPER FACT 3.1.2: Task 1 only (object detection in images); "only one of the
-#   10 categories was used: car objects"; annotations converted to YOLO XYWH.
-# REPOSITORY FACT: nc == 1 (infer_client_v3.py:24) and an 18-channel head
-#   = 3 anchors * (1 class + 5).
-#
-# Paths are filled in by tools/visdrone_to_yolo.py, which also records the
-# verified category index (A1) in the dataset manifest. Nothing is downloaded by
-# this file.
-
 path: /mnt/data10tb/visdrone_car   # dataset root (NOT on / - only 74 GB free)
 train: images/train
 val: images/val                    # DECISION D3 / A2: val is the reporting split

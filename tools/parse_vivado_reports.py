@@ -1,19 +1,4 @@
 #!/usr/bin/env python3
-"""T1.9 -- parse Vivado utilisation and timing reports into the Table 7 equivalent.
-
-PAPER FACT Table 7 (actual): BRAM_18K 138/140 (98.57%), LUT 41,605/53,200
-(78.20%), DSP 204/220 (92.73%); FINN's own estimates were 200 / 26,694 / 202.
-PAPER FACT 4.2.4 explains the gap: estimated BRAM exceeded the 140 available so
-Vivado converted some to LUTRAM, and Vitis HLS blocks inflate LUT use further.
-
-ALSO CALIBRATES OUR RESOURCE MODEL: configs/resource_model.yaml's LUT and BRAM
-parameters are OUR ASSUMPTION and provisional. Running this against a real report
-produces the calibration deltas, after which tools/folding_search.py must be
-re-run and the design re-synthesised.
-
-Reads text reports only -- no Vivado needed to run this parser.
-"""
-
 import argparse
 import json
 import os

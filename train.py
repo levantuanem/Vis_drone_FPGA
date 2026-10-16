@@ -14,6 +14,10 @@ Example (NOT executed here):
         --cfg models/yolov3-tiny-pruned-4w4a.yaml \
         --quant configs/quant.yaml --hyp configs/hyp.scratch-low.yaml \
         --epochs 300 --batch-size 64 --img 416 --name pruned_4w4a
+
+Interrupted (Ctrl+C / kill)? last.pt is written every epoch; continue with the
+same --epochs/--batch-size/--img:
+    python3 train.py ... --resume runs/pruned_4w4a/last.pt
 """
 
 import argparse
@@ -53,13 +57,19 @@ def parse_args(argv=None):
     ap.add_argument("--project", default="runs")
     ap.add_argument("--batchnorm", dest="batchnorm", action="store_true",
                     default=None,
-                    help="force BatchNorm ON -- the A15 ablation (default: OFF, "
-                         "per Table 1 which lists no BN)")
-    ap.add_argument("--no-batchnorm", dest="batchnorm", action="store_false")
+                    help="force BatchNorm ON (default: configs/quant.yaml, "
+                         "which sets it ON -- A15)")
+    ap.add_argument("--no-batchnorm", dest="batchnorm", action="store_false",
+                    help="force BatchNorm OFF -- the A15 ablation, per Table 1 "
+                         "which lists no BN (does not train: DECISIONS.md "
+                         "2026-10-16)")
     ap.add_argument("--fp32", action="store_true",
                     help="T1.2 baseline: no quantisation (unpruned cfg expected)")
     ap.add_argument("--dry-run", action="store_true",
                     help="resolve and print the full configuration, build nothing")
+    ap.add_argument("--resume", default=None, metavar="LAST_PT",
+                    help="continue an interrupted run from its last.pt; output "
+                         "goes to that file's directory")
     return ap.parse_args(argv)
 
 
@@ -99,7 +109,12 @@ def resolve_config(args):
 def main(argv=None):
     args = parse_args(argv)
     cfg = resolve_config(args)
-    out_dir = os.path.join(args.project, args.name)
+    out_dir = (os.path.dirname(os.path.abspath(args.resume)) if args.resume
+               else os.path.join(args.project, args.name))
+    if not args.resume and os.path.isfile(os.path.join(out_dir, "last.pt")):
+        raise SystemExit(
+            "{} already holds a run. Continue it with --resume {}, or pick "
+            "another --name.".format(out_dir, os.path.join(out_dir, "last.pt")))
 
     print("=" * 72)
     print("TRAINING CONFIGURATION ({})".format("T1.2 FP32" if args.fp32 else "T1.3 QAT"))
@@ -150,15 +165,40 @@ def main(argv=None):
         total_steps=max(1, args.epochs * len(train_loader)),
         final_div_factor=1.0 / max(1e-8, float(hyp.get("lrf", 0.01))))
 
+    history, best, bad_epochs, start_epoch, finished = [], -1.0, 0, 0, False
+    if args.resume:
+        ck = torch.load(args.resume, map_location=device)
+        # epochs / batch / img fix OneCycleLR's total_steps and the data; a
+        # mismatch would silently turn the resumed run into a different one.
+        old = ck["config"]["paper_specified"]
+        new = cfg["paper_specified"]
+        diff = {k: (old[k], new[k]) for k in ("epochs", "batch_size", "img_size")
+                if old[k] != new[k]}
+        if diff:
+            raise SystemExit("--resume: settings differ from the original run "
+                             "(old, new): {}".format(diff))
+        model.load_state_dict(ck["model"])
+        opt.load_state_dict(ck["optimizer"])
+        sched.load_state_dict(ck["scheduler"])
+        history, best, bad_epochs = ck["history"], ck["best"], ck["bad_epochs"]
+        start_epoch, finished = ck["epoch"] + 1, ck["finished"]
+        torch.set_rng_state(ck["rng"]["torch"].cpu())
+        np.random.set_state(ck["rng"]["numpy"])
+        if ck["rng"]["cuda"] is not None and torch.cuda.is_available():
+            torch.cuda.set_rng_state_all([s.cpu() for s in ck["rng"]["cuda"]])
+        print("resumed from {} at epoch {} (best mAP50 {:.4f}, {} epochs without "
+              "improvement)".format(args.resume, start_epoch, best, bad_epochs))
+
     if not os.path.isdir(out_dir):
         os.makedirs(out_dir)
     with open(os.path.join(out_dir, "run_config.json"), "w") as fh:
         json.dump(cfg, fh, indent=2, default=str)
 
-    history, best, bad_epochs = [], -1.0, 0
     na, no = head.na, head.no
 
-    for epoch in range(args.epochs):
+    for epoch in range(start_epoch, args.epochs):
+        if finished:
+            break
         model.train()
         t0 = time.time()
         agg = {"box": 0.0, "obj": 0.0, "cls": 0.0}
@@ -195,12 +235,29 @@ def main(argv=None):
                        os.path.join(out_dir, "best.pt"))
         else:
             bad_epochs += 1
-            if bad_epochs >= args.patience:      # PAPER FACT Table 3
-                print("early stop: no improvement for {} epochs".format(args.patience))
-                break
+        early_stop = bad_epochs >= args.patience        # PAPER FACT Table 3
+        finished = early_stop or epoch == args.epochs - 1
 
-    with open(os.path.join(out_dir, "results.json"), "w") as fh:
-        json.dump(history, fh, indent=2)
+        # Everything --resume needs, written every epoch; tmp + rename so an
+        # interruption mid-write cannot leave a truncated last.pt behind.
+        last = os.path.join(out_dir, "last.pt")
+        torch.save({"model": model.state_dict(), "optimizer": opt.state_dict(),
+                    "scheduler": sched.state_dict(), "epoch": epoch,
+                    "best": best, "bad_epochs": bad_epochs, "history": history,
+                    "finished": finished, "config": cfg,
+                    "rng": {"torch": torch.get_rng_state(),
+                            "numpy": np.random.get_state(),
+                            "cuda": (torch.cuda.get_rng_state_all()
+                                     if torch.cuda.is_available() else None)}},
+                   last + ".tmp")
+        os.replace(last + ".tmp", last)
+        with open(os.path.join(out_dir, "results.json"), "w") as fh:
+            json.dump(history, fh, indent=2)
+
+        if early_stop:
+            print("early stop: no improvement for {} epochs".format(args.patience))
+            break
+
     plots.training_curves(history, os.path.join(out_dir, "fig15a_curves.png"))
     final = evaluate_loader(model, head, val_loader, device, na, no)
     if "pr_curve" in final:
@@ -215,7 +272,8 @@ def evaluate_loader(model, head, loader, device, na, no):
     import torch
     import numpy as np
     from utils import metrics as M
-    from utils.postprocess import non_max_suppression
+    from utils.postprocess import (non_max_suppression, EVAL_CONF_THRES,
+                                   EVAL_IOU_THRES, EVAL_MAX_DET)
     from utils.boxes import xywh2xyxy
 
     model.eval()
@@ -227,7 +285,8 @@ def evaluate_loader(model, head, loader, device, na, no):
             n, _, ny, nx = out.shape
             raw = out.view(n, na, no, ny, nx).permute(0, 1, 3, 4, 2).contiguous()
             pred, _ = head([out])
-            dets = non_max_suppression(pred.cpu().numpy())
+            dets = non_max_suppression(pred.cpu().numpy(), EVAL_CONF_THRES,
+                                       EVAL_IOU_THRES, EVAL_MAX_DET)
             size = imgs.shape[-1]
             for i in range(n):
                 dets_all.append(dets[i])

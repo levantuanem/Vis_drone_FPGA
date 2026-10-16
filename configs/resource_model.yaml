@@ -1,18 +1,3 @@
-# Resource-model parameters for tools/cycle_model.py
-#
-# CLASSIFICATION SUMMARY
-#   DSP packing      PAPER FACT      paper Table 4 - exact, trustworthy
-#   cycle counts     DERIVED FACT    verified against paper Table 8 - exact
-#   LUT estimates    OUR ASSUMPTION  provisional, calibrate against Table 7
-#   BRAM estimates   OUR ASSUMPTION  provisional, calibrate against Table 7
-#
-# Calibration procedure (after T1.9 produces a real Vivado report):
-#   1. run tools/parse_vivado_reports.py to extract actual LUT / DSP / BRAM
-#   2. adjust lut_per_mac_hls_lut and lutram_bit_threshold until the model's
-#      prediction matches paper-Table-7-equivalent actuals for OUR design
-#   3. re-run tools/folding_search.py and re-synthesise
-# Until step 3 completes, configs/folding.json stays marked PROVISIONAL.
-
 dsp_packing:                    # PAPER FACT Table 4 (DSP48E1)
   act_4b_weight_4b: 4           # MAC per DSP
   act_or_weight_gt_4b: 2

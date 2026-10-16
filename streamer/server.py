@@ -1,18 +1,4 @@
 #!/usr/bin/env python3
-"""InferServer -- runs on the Zynq PS (T2.4). PAPER FACT 3.11.
-
-Behaviour, all PAPER FACT 3.11.3-3.11.13 and confirmed by REPOSITORY FACT:
-  - WebSocket server, default port 8765
-  - JSON commands `load_model` (base64 .fnn) and `status`
-  - binary frames: 16-byte header + payload
-  - a worker thread batches up to 100 frames per accelerator call
-  - MD5 integrity check decides whether a reconfiguration is needed
-  - the overlay is loaded at model_info.json's max_clock_freq
-
-DEPENDENCIES NOT INSTALLED: `websockets`, `pynq` (board-side only).
-HARDWARE BLOCKER: D9 PENDING -- no Z-turn Board V2 available. NOT RUN.
-"""
-
 import argparse
 import asyncio
 import base64

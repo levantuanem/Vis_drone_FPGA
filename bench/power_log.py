@@ -1,31 +1,4 @@
 #!/usr/bin/env python3
-"""T2.3 -- measured power and thermal. HARDWARE BLOCKER: D9 PENDING (3 items).
-
-PAPER FACT 4.3 / Fig. 18: the whole board is powered from a 5 V DC bench supply
-with current readout; die temperature is read with an IR thermal camera; no
-heatsink, static air only.
-
-PAPER FACT Table 13: idle (no bitstream) 1.9 W; 50 MHz 2.12 W; 100 MHz 2.38 W;
-200 MHz 2.55 W. PAPER FACT 4.3.2 derives PL-only draw of 0.22-0.65 W by
-subtracting the 1.9 W PS+DDR figure.
-PAPER FACT Table 14: FPS/W 20.71/24.63, 36.32/43.86, 64.63/81.88 (batch 1/100).
-PAPER FACT 4.3.2: die 53.1 C measured vs Vivado's 46.3 C max-ambient estimate.
-
-OUR ADDITION I4: measure PL-only power directly, by differencing
-bitstream-loaded against not-loaded, instead of deriving it arithmetically.
-OUR ASSUMPTION A34: sampling rate / averaging window fixed here and recorded,
-with instrument uncertainty reported. The paper states none of this.
-
-MISSING INSTRUMENTS (verified absent on this host):
-  - 5 V DC bench supply with current measurement
-  - IR thermal camera
-Without them, every FPS/W figure in the paper is unreproducible EVEN WITH the
-board, because power cannot be inferred from throughput.
-
-DEPENDENCIES NOT INSTALLED: pynq; plus an instrument driver whose API depends on
-the supply model. `--instrument manual` lets the numbers be entered by hand.
-"""
-
 import argparse
 import json
 import os
@@ -49,12 +22,6 @@ AVERAGE_WINDOW_S = 30.0             # A34
 
 
 class Instrument(object):
-    """Abstract 5 V supply with current readout.
-
-    Subclass per supply model. `ManualInstrument` is the fallback that keeps the
-    measurement protocol reproducible without a programmable instrument.
-    """
-
     def read_volts_amps(self):      # pragma: no cover
         raise NotImplementedError
 

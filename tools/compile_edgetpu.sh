@@ -1,20 +1,5 @@
 #!/usr/bin/env bash
-# T1.13 (second half) -- compile an INT8 TFLite model for the Edge TPU.
-#
-# PAPER FACT 3.3: "This tflite model was then compiled by the edgetpu compiler.
-# In order to perform the export, a newer, community-maintained, version of the
-# libedgetpu module is required" (PAPER FACT ref 68: github.com/feranick/libedgetpu).
-#
-# OUR ADDITION I8: the compiler log reports which ops map to the Edge TPU and
-# which fall back to the CPU. CPU fallback would materially change T3.1, and the
-# paper never reports it -- so we capture the split into a sidecar JSON.
-#
-# DEPENDENCY NOT INSTALLED: edgetpu_compiler, libedgetpu (community fork).
-# Requires NO Coral device -- compilation is host-only.
-# NOT RUN in this phase.
-
 set -euo pipefail
-
 MODEL="${1:-build/model_int8.tflite}"
 OUTDIR="${2:-build}"
 

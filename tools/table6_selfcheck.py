@@ -1,21 +1,4 @@
 #!/usr/bin/env python3
-"""GATE 1 -- Table 6 arithmetic self-check.
-
-The cheapest and strongest correctness gate in the project: it confirms that our
-reading of paper Table 1 (including the DECISION D2 stride correction and the
-P1/P3 resolutions) reproduces paper Table 6 exactly.
-
-Folding-independent, data-independent, tool-independent. Requires only the Python
-standard library -- no torch, no brevitas, no FINN, no GPU, no dataset.
-
-If this fails, the architecture is wrong and nothing downstream is worth running.
-
-Usage:
-    python3 tools/table6_selfcheck.py [--json results/table6_selfcheck.json]
-
-Exit code 0 = all checks pass, 1 = at least one failure.
-"""
-
 import argparse
 import json
 import os

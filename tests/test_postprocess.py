@@ -156,11 +156,33 @@ def test_metrics_perfect_and_empty():
 
 
 def test_metrics_false_positive_lowers_precision():
+    # the false positive outranks the true one, so every operating point that
+    # recalls the gt box also keeps the false positive
     gt = [np.array([[0, 10, 10, 50, 50]])]
-    det = [np.array([[10, 10, 50, 50, 0.9, 0], [300, 300, 340, 340, 0.8, 0]])]
+    det = [np.array([[10, 10, 50, 50, 0.8, 0], [300, 300, 340, 340, 0.9, 0]])]
     r = M.evaluate(det, gt)
     assert r["recall"] == 1.0
     assert abs(r["precision"] - 0.5) < 1e-9
+
+
+def test_metrics_report_the_max_f1_point_not_the_lowest_confidence():
+    gt = [np.array([[0, 10, 10, 50, 50]])]
+    det = [np.array([[10, 10, 50, 50, 0.9, 0], [300, 300, 340, 340, 0.01, 0]])]
+    r = M.evaluate(det, gt)
+    assert r["precision"] == 1.0 and r["recall"] == 1.0
+    assert r["conf_at_best_f1"] == 0.9
+
+
+def test_nms_single_class_ignores_the_untrained_class_channel():
+    pred = np.zeros((1, 1, 6))
+    pred[0, 0] = [50, 50, 20, 20, 0.9, 0.0]   # class channel at its floor
+    dets = Q.non_max_suppression(pred)
+    assert len(dets[0]) == 1 and dets[0][0, 4] == 0.9
+
+
+def test_eval_thresholds_do_not_inherit_the_deployment_cap():
+    assert Q.EVAL_MAX_DET > Q.DEFAULT_MAX_DET
+    assert Q.EVAL_CONF_THRES < Q.DEFAULT_CONF_THRES
 
 
 def test_ap_is_monotone_interpolated():

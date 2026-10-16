@@ -1,13 +1,3 @@
-"""Brevitas quantised building blocks (T1.3).
-
-DEPENDENCY NOT INSTALLED: requires `brevitas==0.9.0` and `torch==1.13.1`
-(PAPER FACT Table 2). See requirements/README.md. Importing this module without
-them raises a clear error rather than failing obscurely.
-
-Bit widths are PAPER FACT (paper 3.1.1); quantiser details are OUR ASSUMPTION
-(A10-A17) and are read from configs/quant.yaml so no value is hidden in code.
-"""
-
 from __future__ import absolute_import
 
 try:
@@ -21,10 +11,11 @@ except ImportError as exc:  # pragma: no cover - dependency documented, not inst
 
 try:
     import brevitas.nn as qnn
+    from brevitas.inject.enum import ScalingImplType
     from brevitas.quant import (
         Int8WeightPerTensorFloat,
         Uint8ActPerTensorFloat,
-        Int8ActPerTensorFloat,
+        Int8ActPerTensorFloatMinMaxInit,
     )
     from brevitas.core.restrict_val import RestrictValueType  # noqa: F401
 except ImportError as exc:  # pragma: no cover
@@ -52,9 +43,18 @@ class ActQuantUnsigned(Uint8ActPerTensorFloat):
     pass
 
 
-class ActQuantSigned(Int8ActPerTensorFloat):
-    """Signed activation quantiser, used after HardTanh. A12."""
-    pass
+class ActQuantSigned(Int8ActPerTensorFloatMinMaxInit):
+    """Signed activation quantiser, used after HardTanh. A12.
+
+    CONSTANT scale = max_val / 127 (narrow range), i.e. exactly 1/127 at 8 bits,
+    so HardTanh's [-1, 1] maps onto [-127, 127]. This is what makes the
+    REPOSITORY FACT dequant scale (scale.npy == 1/127) true by construction; a
+    learned scale would make the PS-side Mul constant whatever training chose.
+    """
+    scaling_impl_type = ScalingImplType.CONST
+    narrow_range = True
+    min_val = -1.0
+    max_val = 1.0
 
 
 class QuantConvBlock(nn.Module):
@@ -63,8 +63,9 @@ class QuantConvBlock(nn.Module):
     PAPER FACT Table 1: every convolution is followed by QuantReLU, except the
     final one which uses QuantHardTanh.
 
-    OUR ASSUMPTION A15: `batchnorm` defaults to False because Table 1 lists no BN
-    layers. This is the project's highest-risk assumption -- FINN absorbs BN into
+    OUR ASSUMPTION A15: Table 1 lists no BN layers, but configs/quant.yaml turns
+    BN on because the BN-free network does not train (DECISIONS.md 2026-10-16).
+    This is the project's highest-risk assumption -- FINN absorbs BN into
     MultiThreshold during streamlining so the *hardware* is unaffected either
     way, but training dynamics and accuracy are not. The flag exists precisely so
     the ablation can be run without editing code.

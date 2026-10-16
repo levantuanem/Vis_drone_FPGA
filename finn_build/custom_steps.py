@@ -1,16 +1,3 @@
-"""Custom FINN transformations and the build's correctness assertions.
-
-FINN is imported lazily inside each function so this module stays importable
-(and testable) without FINN installed.
-
-PAPER FACT 3.4.1: a `Div` node must be inserted before the first convolution so
-the UINT8 input is normalised to [0,1] on-chip.
-PAPER FACT 3.4.4: `CreateDataflowPartition` must yield EXACTLY ONE partition --
-FINN cannot map multiple partitions onto the PL. The paper treats this as a
-correctness requirement, so we make it an assertion that fails the build rather
-than a condition we hope holds.
-"""
-
 import os
 import sys
 

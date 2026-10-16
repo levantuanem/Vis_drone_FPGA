@@ -1,24 +1,4 @@
 #!/usr/bin/env python3
-"""T1.9 -- HLS synthesis, IP stitching, ZynqBuild.
-
-PAPER FACT 3.9-3.10, sequence:
-  PrepareIP -> HLSSynthIP -> CreateStitchedIP (adds idma0/odma0 for DRAM in/out)
-  -> ZynqBuild (Vivado synth + place & route) -> PYNQ driver generation (3.10.2)
-
-Hardware target (models/arch_spec.py):
-  part   xc7z020clg400-1          DECISION D1 (REPOSITORY FACT visdrone.hwh
-                                  SPEEDGRADE="-1"; paper prose says -2)
-  board  myir.com:mys-7z020:part0:2.1   REPOSITORY FACT -- board files must be
-                                        OBTAINED, see finn_build/platform/
-  clock  200 MHz, "aggressive"     REPOSITORY FACT model_info.json
-  tools  Vivado + Vitis HLS 2022.1 REPOSITORY FACT visdrone.hwh
-
-OUR ASSUMPTION A29: Vivado synth/impl strategy = defaults unless timing fails.
-HOST CONSTRAINT: NUM_DEFAULT_WORKERS must be 1 -- this machine has 15 GB RAM.
-
-DEPENDENCY NOT INSTALLED: FINN 0.10, Vivado/Vitis HLS 2022.1. NOT RUN in this phase.
-"""
-
 import argparse
 import json
 import os

@@ -1,18 +1,4 @@
 #!/usr/bin/env python3
-"""T1.6 -- layer specialisation + folding application.
-
-Specialisation is PAPER FACT, decoded from Table 6's MVU instance names and
-stored in configs/specialize.json (conv 1,2,4,9,10 -> RTL; 3,5,6,7,8 -> HLS).
-PAPER FACT 3.5: SpecializeLayers defaults to RTL where available, so HLS choices
-MUST be applied explicitly via ApplyConfig.
-
-Folding (PE/SIMD) is NOT taken from anywhere -- it is DERIVED by
-tools/folding_search.py (DECISION D7) because paper 3.7.2 delegates these values
-to a repository that does not contain them (spec P7).
-
-DEPENDENCY NOT INSTALLED: FINN 0.10. NOT RUN in this phase.
-"""
-
 import argparse
 import json
 import os

@@ -1,21 +1,4 @@
 #!/usr/bin/env python3
-"""T1.11 -- parse Vivado `report_power` into the Tables 11 and 12 equivalents.
-
-PAPER FACT Table 11 (per module): top_wrapper 3.129 W, of which
-StreamingDataflowPartition_1 1.554 W and zynq_ps 1.497 W; idma0 0.019,
-odma0 0.012, smartconnect_0 0.042, axi_interconnect_0 0.004.
-PAPER FACT Table 12 (per resource): total on-chip 3.358 W = dynamic + 0.229 W
-static; Clocks 0.124, Slice Logic 0.428 (LUT as Logic 0.384), Signals 0.612,
-Block RAM 0.262, DSPs 0.207, PS7 1.496.
-PAPER FACT 4.3.1: the measured consumption is "considerably lower" because the
-estimates are "generated under worst-case or synthetic conditions".
-
-OUR ASSUMPTION A30: switching activity is vectorless (4.3.1 implies it). Record
-the confidence level Vivado reports.
-
-Text-report parser -- needs no Vivado to run.
-"""
-
 import argparse
 import json
 import os

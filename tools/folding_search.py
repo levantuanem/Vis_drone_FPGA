@@ -1,30 +1,4 @@
 #!/usr/bin/env python3
-"""Folding derivation (T1.6) -- DECISION D7.
-
-Re-derives the per-layer PE/SIMD configuration that paper §3.7.2 delegates to a
-repository which does not contain it (spec P7). Nothing is copied or invented:
-the procedure below is paper §3.6.1-3.6.2 and the cost function is the cycle
-model verified against paper Table 8 (see tools/cycle_model.py).
-
-PAPER FACT §3.6.1 -- the procedure, implemented verbatim:
-  1. start fully folded (every PE and SIMD = 1)
-  2. iteratively unfold the slowest layer
-  3. balance the cycles-per-layer metric within "reasonable resource limits"
-  4. keep small tail layers fully folded ("no advantage in accelerating an
-     already fast layer")
-  5. stop when the slowest layer is fully unfolded (the bottleneck)
-
-PAPER FACT §3.6.2 -- the key move: when DSPs are exhausted, switch MVUs to the
-  HLS LUT implementation style to keep unfolding using the abundant LUT fabric.
-
-REPOSITORY FACT -- two endpoints are pinned and are enforced as hard constraints:
-  conv 1  input stream folding 3  => MVU SIMD = k^2*C_in = 27  (ishape_folded)
-  conv 10 output PE = 1                                        (oshape_folded)
-
-OUTPUT: configs/folding.json, marked provisional until the resource model is
-calibrated against T1.9's real Vivado report (paper Table 7).
-"""
-
 import argparse
 import json
 import os

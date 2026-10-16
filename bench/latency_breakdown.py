@@ -1,19 +1,4 @@
-#!/usr/bin/env python3
-"""T2.2 -- per-stage latency breakdown. HARDWARE BLOCKER: D9 PENDING.
-
-PAPER FACT Table 10 stages: Preprocessing, Driver Exec, Rescale, Detect, NMS,
-Box Process, and Total Postprocess (= detect + NMS + box process).
-PAPER FACT 4.2.6: batch size 1, clocks {50, 100, 200} MHz, mean +/- sigma.
-PAPER FACT 4.2.6 derived claim to test: the Python driver costs 21% / 35% / 50%
-of throughput at 50 / 100 / 200 MHz, because repack time is fixed while compute
-time shrinks.
-
-OUR ASSUMPTION A33: the frame count is fixed here and recorded (the paper gives
-mean +/- sd, so n > 1, but never states n).
-
-DEPENDENCIES NOT INSTALLED: pynq, opencv-python (board-side). NOT RUN.
-"""
-
+#!/usr/bin/env python
 import argparse
 import json
 import os

@@ -87,12 +87,18 @@ def evaluate(detections, ground_truths, iou_thres=0.5):
     fpc = np.cumsum(~tp)
     recall = tpc / float(n_gt)
     precision = tpc / np.maximum(tpc + fpc, 1e-12)
+    # P and R are reported at the max-F1 confidence, as Ultralytics val.py does
+    # (unsmoothed here). The last point would instead reflect EVAL_CONF_THRES.
+    f1 = 2 * precision * recall / np.maximum(precision + recall, 1e-12)
+    best = int(np.argmax(f1))
     return {
-        "precision": float(precision[-1]),
-        "recall": float(recall[-1]),
+        "precision": float(precision[best]),
+        "recall": float(recall[best]),
+        "f1": float(f1[best]),
+        "conf_at_best_f1": float(conf[order][best]),
         "map50": ap_from_pr(recall, precision),
-        "tp": int(tpc[-1]),
-        "fp": int(fpc[-1]),
+        "tp": int(tpc[best]),
+        "fp": int(fpc[best]),
         "n_gt": int(n_gt),
         "pr_curve": {"recall": recall.tolist(), "precision": precision.tolist()},
     }

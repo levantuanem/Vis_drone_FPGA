@@ -1,33 +1,4 @@
 #!/usr/bin/env python3
-"""Analytical cycle / resource model for the FINN dataflow pipeline (T1.8).
-
-Stdlib-only. No FINN, no Vivado, no dataset.
-
-CYCLE MODEL -- DERIVED FACT, verified against the paper's own Table 8
---------------------------------------------------------------------
-    MVU cycles = (C_out / PE) * (k^2 * C_in / SIMD) * (H_out * W_out)
-    latency    = total_cycles / f_clk
-    throughput = f_clk / max_node_cycles
-
-Verification performed before adopting the model (all exact):
-    4,586,895 cycles / 100 MHz            = 45.87 ms   == Table 8 latency
-    100 MHz / 216,320 cycles              = 462.3 FPS  == Table 8 throughput
-    416^2 + 208^2 = 173,056 + 43,264      = 216,320    == Table 8 max node
-                                                          (StreamingMaxPool_hls_0)
-
-The maxpool term (one cycle per input pixel plus one per output pixel) is a
-DERIVED FACT: it is the only simple form that reproduces 216,320 exactly for the
-first pool, and the paper names that very node as the bottleneck.
-
-RESOURCE MODEL -- OUR ASSUMPTION, provisional
----------------------------------------------
-DSP counting follows paper Table 4 packing exactly and is trustworthy.
-LUT and BRAM estimates are COARSE and must be calibrated against the real
-Vivado report from T1.9 (paper Table 7: 138 BRAM / 41,605 LUT / 204 DSP).
-Until then every resource number emitted here carries
-`"calibration_required": true`. See configs/resource_model.yaml.
-"""
-
 import argparse
 import json
 import math

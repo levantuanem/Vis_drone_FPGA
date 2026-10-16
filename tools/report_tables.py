@@ -1,15 +1,4 @@
 #!/usr/bin/env python3
-"""Render every paper-equivalent table from results/, so no number is hand-typed.
-
-Each table is emitted with:
-  - OUR value (or a clear "not yet produced" marker)
-  - the PAPER FACT value as CONTEXT, never as a target
-  - the experiment ID that produces it and its blocker, if any
-
-Tables 6 and 8-estimated can be produced RIGHT NOW from arch_spec +
-configs/folding.json, with no dataset, GPU, toolchain or hardware.
-"""
-
 import argparse
 import json
 import os

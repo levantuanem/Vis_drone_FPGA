@@ -1,22 +1,3 @@
-""".fnn model package -- PAPER FACT 3.11.11-3.11.13.
-
-A `.fnn` is a zip containing exactly:
-    model.bit          FPGA bitstream
-    model.hwh          hardware handoff
-    model.pkl          shape dictionaries (ishape_* / oshape_*)
-    model_info.json    max_clock_freq, model_name, trained_on_dataset
-
-Confirmed byte-for-byte against the repository's reference package
-`client/test_package/yolov3-tiny-4w4a-visdrone.fnn`, whose model_info.json is:
-    {"model_name": "yolov3-tiny", "trained_on_dataset": "visdrone",
-     "max_clock_freq": 200.0, "clock_mode": "aggressive"}
-
-PAPER FACT 3.11.4 / 3.11.13: integrity is checked with an MD5 of the .fnn, and
-the server verifies all four files are present before configuring the FPGA.
-
-Stdlib only -- unit-testable without PYNQ or a board.
-"""
-
 import hashlib
 import json
 import os

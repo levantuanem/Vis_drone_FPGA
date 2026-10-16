@@ -1,13 +1,4 @@
 #!/usr/bin/env python3
-"""Orchestrates FINN build steps 01..05 with per-step artifact manifests.
-
-Every step records the config hash and tool versions it ran under, so each result
-is traceable. Steps can be run individually or as a chain.
-
-DEPENDENCY NOT INSTALLED: FINN 0.10, Vivado/Vitis 2022.1. NOT RUN in this phase.
-`--plan` prints the full chain and the blockers WITHOUT importing FINN.
-"""
-
 import argparse
 import hashlib
 import json

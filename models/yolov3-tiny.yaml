@@ -1,14 +1,3 @@
-# T1.2 baseline -- UNPRUNED stock YOLOv3-Tiny, FP32, BOTH detection branches.
-#
-# PAPER FACT: Table 5's left column is "YOLOv3-Tiny Original" at 416x416 on the
-# same single-class VisDrone car dataset (P 67.06 / R 38.44 / mAP@0.5 41.76).
-# The paper does not restate the stock architecture, so this file is the
-# conventional YOLOv3-Tiny definition.
-#
-# OUR ASSUMPTION: the stock YOLOv3-Tiny anchor set and branch assignment are used
-# for this baseline (the repository's single-branch anchors apply only to the
-# pruned model). Recorded in DECISIONS.md.
-
 nc: 1
 names: ['car']
 img_size: 416

@@ -1,19 +1,3 @@
-"""Wire protocol -- PAPER FACT 3.11.3-3.11.5, confirmed by REPOSITORY FACT.
-
-Binary inference request, 16-byte header then raw payload (PAPER FACT 3.11.5):
-    frame_id    4 bytes, unsigned int
-    width       4 bytes, unsigned int
-    height      4 bytes, unsigned int
-    channels    2 bytes, unsigned short
-    dtype_code  2 bytes, unsigned short
-
-JSON control messages (PAPER FACT 3.11.4): `load_model`, `status`.
-
-REPOSITORY FACT: default port 8765 (infer_server.py), client queue size 30
-(infer_client_v3.py:423), server batch cap 100 (PAPER FACT 3.11.9 + repository).
-Stdlib only, so the protocol is unit-testable without any heavy dependency.
-"""
-
 import struct
 
 HEADER_FORMAT = "<IIIHH"           # little-endian; 4+4+4+2+2 = 16 bytes

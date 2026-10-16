@@ -1,28 +1,4 @@
-"""Detection head -- decode only, runs on the PS / host, never on the FPGA.
-
-CLASSIFICATION: REPOSITORY FACT. The paper describes this layer only as
-"basically only contains scaling operations to convert between bounding box
-coordinate spaces" (3.1) and detaches it at export (3.2). The actual formulas
-come from the author repository, client/models.py:
-
-    xy      = (y[..., 0:2] + 0.5 + grid) * stride
-    wh      = (y[..., 2:4] + 1.0) ** 2  * anchor_grid
-    obj,cls =  y[..., 4:] / 2 + 0.5
-
-These are NOT stock YOLOv3 (which uses sigmoid(xy)+grid, exp(wh)*anchor,
-sigmoid(obj)). They are affine/quadratic maps that bring a QuantHardTanh output
-bounded in [-1, 1] into the correct domains.
-
-CRITICAL: this parameterisation must be used at TRAINING time as well, or the
-loss optimises a different function than inference decodes. utils/loss.py
-inverts exactly these formulas.
-
-Anchors (REPOSITORY FACT infer_client_v3.py:25): (10,14), (23,27), (37,58) at
-stride 32 -- YOLOv3-Tiny's small-object set, reused on the 13x13 branch.
-"""
-
 from __future__ import absolute_import
-
 import os
 import sys
 

@@ -1,25 +1,4 @@
 #!/usr/bin/env python3
-"""T1.5 -- FINN front-end: QONNX -> single hardware dataflow partition.
-
-PAPER FACT 3.4, transform sequence implemented in the paper's own order:
-  1 ConvertQONNXtoFINN        fold Quant into Conv/MaxPool; activations ->
-                              MultiThreshold                              (3.4.1)
-  2 tidy-up                   infer shapes/datatypes, unique node names    (3.4.1)
-  3 insert Div                normalise UINT8 input to [0,1]      -> Fig. 4 (3.4.1)
-  4 Streamline                remove float ops; lower Conv -> Im2Col+MatMul
-                                                                 -> Fig. 5 (3.4.2)
-  5 to_hw                     MatMul -> MVU, Im2Col -> SWG; 2 Transposes
-                              remain (NCHW vs NHWC)              -> Fig. 6 (3.4.3)
-  6 CreateDataflowPartition   exactly 1 partition; trailing Mul stays on PS
-                                                                 -> Fig. 7 (3.4.4)
-
-OUR ASSUMPTION A20: the exact tidy-up pass list -- 3.4.1 declines to enumerate it
-("the FINN source code can be consulted"), so FINN 0.10's standard set is used and
-recorded in the step manifest.
-
-DEPENDENCY NOT INSTALLED: FINN 0.10. NOT RUN in this phase.
-"""
-
 import argparse
 import json
 import os

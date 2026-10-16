@@ -1,22 +1,4 @@
 #!/usr/bin/env python3
-"""T1.10 -- RTL simulation throughput (and the harness T1.12 reuses).
-
-PAPER FACT 4.2.2 / 4.2.5: RTL simulation with Verilator; the paper's Table 8
-RTLSim column reports max node 741,670 cycles, latency 7.41 ms, 134.83 FPS. It
-also notes that a bare-metal C driver later reached that full 134 FPS on real
-hardware, whereas the Python driver gave 104 FPS.
-
-SPEC P9 CAVEAT: Table 8's RTLSim latency (7.41 ms = 741 k cycles at 100 MHz)
-EQUALS its max-node cycle count, which is dimensionally odd for a pipeline whose
-estimated latency was 4.59 M cycles. We therefore report per-frame throughput
-cycles and first-frame latency SEPARATELY and do not try to match that row.
-
-OUR ASSUMPTION A27: waveform tracing disabled (infeasible at millions of cycles
-on a 15 GB host). A28: stream length / warm-up fixed here and recorded.
-
-DEPENDENCY NOT INSTALLED: FINN 0.10, Verilator, pyverilator. NOT RUN in this phase.
-"""
-
 import argparse
 import json
 import os

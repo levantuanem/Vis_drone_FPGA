@@ -1,20 +1,4 @@
 #!/usr/bin/env python3
-"""InferClient -- 4-thread streaming client (T2.4). PAPER FACT 3.11.2.
-
-Threads, exactly as paper 3.11.2 lists them:
-  1 Capture          OpenCV frames -> letterbox 416x416 RGB -> bounded queue
-  2 Frame Dispatcher binary messages -> WebSocket (non-blocking)
-  3 Post-processing  match results by frame_id -> dequant, decode, NMS, draw
-  4 Display          render annotated frames
-
-OUR ADDITION (I7): `--synthetic-fps` drives the pipeline from a generator faster
-than 30 FPS, so a 30 FPS result can be shown to be pipeline-limited rather than
-camera-limited. The paper reports 30 FPS without separating the two.
-
-DEPENDENCIES NOT INSTALLED: `websockets`, `opencv-python`.
-HARDWARE BLOCKER: D9 PENDING -- requires a reachable InferServer on the board.
-"""
-
 import argparse
 import asyncio
 import base64

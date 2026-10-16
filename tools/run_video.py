@@ -1,22 +1,4 @@
 #!/usr/bin/env python3
-"""T2.5 -- offline video inference and annotation. Fig. 19 equivalent.
-
-DECISION D8 / A35: DEFERRED. The paper's footage (4.5, "captured footage from a
-drone flown over roads and parking lots") is NOT published and is unobtainable.
-If this experiment proceeds, a held-out VisDrone *video* sequence may be
-substituted -- and the substitution must be labelled as a DEVIATION.
-
-OUR ADDITION I6: the paper's claim is purely qualitative ("almost all of the cars
-were correctly detected and localized"). `--labels` lets a hand-labelled frame
-subset be scored, replacing "almost all" with a number. This matters because the
-REPOSITORY FACT NMS thresholds (conf 0.10, iou 0.10) are far more permissive than
-a typical 0.25/0.45 and would inflate apparent recall.
-
-Backends:
-  --backend rtlsim   Tier 1 fallback: demonstrates function without the board
-  --backend board    Tier 2: HARDWARE BLOCKER D9 PENDING
-"""
-
 import argparse
 import json
 import os

@@ -1,19 +1,3 @@
-"""Canonical architecture specification — the single source of truth.
-
-This module is **stdlib-only on purpose**. It carries no torch / brevitas / numpy
-dependency so that the Table 6 arithmetic gate, the cycle model and the folding
-search can all run before any heavy toolchain exists.
-
-Provenance of every field is tagged:
-
-  PAPER FACT      - stated in the paper; section/table cited
-  REPOSITORY FACT - recovered from sn0wst0rm/FINN-VisDrone-YOLO; file cited
-  DERIVED FACT    - only one value is self-consistent; the constraint is given
-  OUR ASSUMPTION  - undeterminable from either source; A-id from the spec
-
-See final_implementation_spec.md §1 and implementation_decisions.md.
-"""
-
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
 

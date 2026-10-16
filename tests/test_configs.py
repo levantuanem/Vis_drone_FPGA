@@ -39,7 +39,7 @@ def test_quant_yaml_bit_widths_match_arch_spec():
 
 def test_quant_yaml_records_the_a15_batchnorm_assumption():
     q = _yaml("configs/quant.yaml")
-    assert q["structure"]["batchnorm"] is False                # A15
+    assert q["structure"]["batchnorm"] is True                 # A15 (2026-10-16)
     assert q["structure"]["qat_from_scratch"] is True          # A17
 
 

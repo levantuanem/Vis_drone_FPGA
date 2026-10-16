@@ -1,32 +1,4 @@
 #!/usr/bin/env python3
-"""VisDrone2019-DET -> YOLO single-class 'car' converter (T1.1).
-
-DOES NOT DOWNLOAD ANYTHING. Point --src at an already-extracted
-VisDrone2019-DET-<split> directory.
-
-PAPER FACT 3.1.2
-  - Task 1 only (object detection in images)
-  - "only one of the 10 categories was used: car objects"
-  - annotations converted to YOLO XYWH notation
-  - dataset scale: 10,209 images, 2.6 M boxes, 10 categories
-
-DECISION D6 (PAPER-DETERMINED): `car` only; van/truck/bus are NOT merged -- they
-are separate entries in the very enumeration the paper quotes.
-
-OUR ASSUMPTIONS (recorded in the emitted manifest, not hidden in code):
-  A1  the numeric category index for `car` is VERIFIED against the annotation
-      files, never assumed. The documented VisDrone order is
-        0 ignored-regions, 1 pedestrian, 2 people, 3 bicycle, 4 car, 5 van,
-        6 truck, 7 tricycle, 8 awning-tricycle, 9 bus, 10 motor
-      and --car-index defaults to 4, but --verify-index cross-checks the
-      distribution and refuses to proceed on a suspicious result.
-  A6  boxes with score == 0 (VisDrone "ignored regions") are DROPPED.
-  A7  all truncation / occlusion levels are KEPT.
-
-VisDrone annotation line format:
-  <bbox_left>,<bbox_top>,<bbox_width>,<bbox_height>,<score>,<category>,<truncation>,<occlusion>
-"""
-
 import argparse
 import collections
 import hashlib
