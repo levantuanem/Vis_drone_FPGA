@@ -27,3 +27,5 @@ __pycache__/
 /ref_repo/
 # the reference paper is publisher-copyrighted, keep it local only
 *.pdf
+# our own reports are the exception
+!/docs/reports/*.pdf
