@@ -131,7 +131,7 @@ def main(argv=None):
     from models.quant_yolov3_tiny import build as build_quant
     from models.detect import Detect
     from utils.datasets import build_loader
-    from utils.loss import HardTanhDecodeLoss
+    from utils.loss import HardTanhDecodeLoss, init_objectness_prior
     from utils import metrics as M, plots
 
     torch.manual_seed(args.seed)
@@ -146,10 +146,13 @@ def main(argv=None):
 
     device = torch.device(args.device if torch.cuda.is_available() else "cpu")
     model = build_quant(args.quant, batchnorm=cfg["our_assumptions"]["batchnorm"])
+    head = Detect(nc=cfg["dataset"].get("nc", 1))
+    init_objectness_prior(model, head.na, head.no, args.img, A.DETECT_STRIDE)
     model.to(device)
-    head = Detect(nc=cfg["dataset"].get("nc", 1)).to(device)
+    head.to(device)
     criterion = HardTanhDecodeLoss(A.ANCHORS_PX, A.DETECT_STRIDE,
-                                   nc=cfg["dataset"].get("nc", 1), hyp=hyp).to(device)
+                                   nc=cfg["dataset"].get("nc", 1), hyp=hyp,
+                                   img_size=args.img).to(device)
 
     train_loader = build_loader(root, "train", args.img, args.batch_size,
                                 augment=True, hyp=hyp, workers=args.workers)
@@ -211,6 +214,8 @@ def main(argv=None):
             loss, parts = criterion(raw, targets)
             opt.zero_grad(set_to_none=True)
             loss.backward()
+            # YOLOv5 v7.0 train.py clips at 10; the loss is batch-size scaled.
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=10.0)
             opt.step()
             sched.step()
             for k in agg:

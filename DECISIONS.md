@@ -186,3 +186,54 @@ file records **what the code actually does**, with the file that does it.
   differ by about as much at epoch 0, so this is not bit-exact).
 - Measured at batch 64 / 416: about 4.3 GB of GPU memory per `nvidia-smi`
   (3.3 GB allocated by PyTorch), about 2.6 min of training per epoch.
+
+### 2026-10-16 — first T1.3 run diagnosed; loss replaced by YOLOv5 ComputeLoss
+
+- **Run `runs/pruned_4w4a`** (MSE loss) early-stopped at epoch 274, best
+  mAP@0.5 **0.0173** at epoch 244 (paper CONTEXT 0.1768). Re-scoring
+  `best.pt` on `val` at lower IoU thresholds shows the network finds cars but
+  mislocates them:
+
+  | IoU | P | R | mAP |
+  |---|---|---|---|
+  | 0.5 | 0.119 | 0.076 | 0.017 |
+  | 0.3 | 0.275 | 0.191 | 0.087 |
+  | 0.1 | 0.460 | 0.327 | 0.238 |
+
+  Median best IoU of any detection per GT box is 0.077; only 9 % of GT boxes
+  have a detection above IoU 0.5. Val cars are 11.9 × 8.6 px median (33 %
+  under 8 px wide), so a 0.2-cell centre error already destroys IoU. Cell
+  collisions are not the limit: 1.86 GT boxes per occupied cell, 3 anchors.
+- **DERIVED FACT.** The REPOSITORY FACT decode is YOLOv5's with `sigmoid(x)`
+  replaced by `p = y/2 + 0.5` (`2p - 0.5 = y + 0.5`, `(2p)² = (y + 1)²`). With
+  paper §3.1.4's "standard low-scratch hyper-parameters", the author's loss
+  was almost certainly YOLOv5 `ComputeLoss` under that substitution, and
+  `configs/hyp.scratch-low.yaml`'s gains (box 0.05, obj 1.0) are calibrated
+  for it, not for MSE. Paper Table 5's final losses (box 0.153, obj 0.305) are
+  on that scale.
+- **`utils/loss.py` is now that loss** (A5): 1 − CIoU on the decoded box;
+  3-cell assignment (own cell + two nearest neighbours, `anchor_t` 4); BCE on
+  `p(y_obj)` against target = detached CIoU; gains scaled as YOLOv5 `train.py`
+  does (`box·3/nl` = 0.15, `obj·(416/640)²·3/nl` = 1.27, obj balance 4.0 for
+  one layer); total × batch size. Logged `box`/`obj` are gain-scaled per-batch
+  means, as YOLOv5 logs them, so they are **not comparable with the MSE
+  run's columns**. Pinned by `tests/test_loss.py`, including that the loss
+  scores exactly the box `models/detect.Detect` returns.
+- **OUR ASSUMPTIONS on top of YOLOv5:**
+  - `p` is squeezed into `[1e-3, 1 − 1e-3]` before the log. With the affine
+    `p` the BCE gradient is ~1/p (with sigmoid it is bounded by 1); a clamp
+    instead would add a zero-gradient region to HardTanh's own (measured:
+    `QuantHardTanh` passes 0 gradient beyond ±1).
+  - Objectness prior as YOLOv5 `_initialize_biases`: `p = 8/(416/32)²`, put
+    into the final BatchNorm shift as `y = 2p − 1` (the conv has no bias);
+    skipped when BN is off. On one train batch at init it lowers obj loss
+    from 8.05 to 2.62.
+  - `train.py` clips the gradient norm at 10, as YOLOv5 v7.0 does; needed
+    because the loss is now batch-size scaled (grad norm ≈ 3,300 at init,
+    ≈ 1,070 at the old `best.pt`).
+- **Not changed:** augmentation (mosaic/scale/translate stay off, A4),
+  `OneCycleLR` (its 30 % warmup and momentum cycling differ from YOLOv5's
+  3-epoch warmup + linear decay; `warmup_*` in the hyp file remain unused),
+  patience 30.
+- **Not yet trained.** `runs/pruned_4w4a` holds the MSE run and is kept as
+  evidence; the next run needs a new `--name`, not `--resume`.
