@@ -166,10 +166,10 @@ rather than failing obscurely, and every CLI has an offline mode
 ## Implementation order and gates
 
 ```
-GATE 0  Phase 0 spike       install FINN 0.10 + Vivado 2022.1, push a FINN
+GATE 0  Phase 0 spike       install FINN 0.10 + Vivado 2022.2, push a FINN
         (~1 day)            example to a 7z020 bitstream + rtlsim.
-                            Tests the 15 GB RAM ceiling and the UNVERIFIED
-                            FINN 0.10 ⇄ Vivado 2022.1 pairing (D10).
+                            Tests the 15 GB RAM ceiling and the FINN 0.10 ⇄
+                            Vivado 2022.2 pairing on this host (D10).
 GATE 1  Table 6 check       ✅ ALREADY PASSING — hours, free, no deps
         T1.1 → T1.3 → T1.4  dataset, QAT training, QONNX export
         T1.5 → T1.6 → T1.7  FINN front-end, folding, FIFO sizing

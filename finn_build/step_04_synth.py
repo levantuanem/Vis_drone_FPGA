@@ -24,9 +24,10 @@ def preflight():
     ver = os.environ.get("FINN_XILINX_VERSION")
     if ver and ver != A.VIVADO_VERSION:
         problems.append(
-            "FINN_XILINX_VERSION={} but the reference build used {} "
-            "(REPOSITORY FACT visdrone.hwh). DECISION D10 says escalate rather "
-            "than silently resolve a version conflict.".format(ver, A.VIVADO_VERSION))
+            "FINN_XILINX_VERSION={} but DECISION D10 fixes Vivado {} (the "
+            "version FINN 0.10 documents; the reference build used {}). "
+            "Escalate rather than silently switch versions.".format(
+                ver, A.VIVADO_VERSION, A.REFERENCE_VIVADO_VERSION))
     board_files = [f for f in os.listdir(PLATFORM_DIR)
                    if f.endswith((".xml", ".tcl"))] if os.path.isdir(PLATFORM_DIR) else []
     if not board_files:
@@ -77,10 +78,11 @@ def run(fifo_onnx, out_dir, clk_ns=5.0, strategy=None):
         "step": "04_synth",
         "fpga_part": A.FPGA_PART, "board": A.FPGA_BOARD,
         "vivado_version_expected": A.VIVADO_VERSION,
+        "vivado_version_reference": A.REFERENCE_VIVADO_VERSION,
         "target_clock_mhz": 1000.0 / clk_ns,
         "clock_mode": A.CLOCK_MODE,
         "strategy": strategy or "Vivado defaults (A29)",
-        "decisions": ["D1 speed grade -1", "D10 FINN 0.10 + Vivado 2022.1"],
+        "decisions": ["D1 speed grade -1", "D10 FINN 0.10 + Vivado 2022.2"],
         "paper_table7_actual_for_context": A.TABLE7_ACTUAL,
         "artifacts": {"stitched": stitched, "final": final},
     }

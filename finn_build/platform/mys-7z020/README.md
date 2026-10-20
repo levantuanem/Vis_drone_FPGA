@@ -39,8 +39,8 @@ board_files/...     # as packaged by MYIR
 - **D1** — speed grade `-1`, taken from this very `.hwh`, not from the paper's
   `-2` prose. If the physical board's device marking reads `-2`, rebuild and
   report both.
-- **D10** — Vivado `2022.1`, also from this `.hwh`. The paper never states a
-  Vivado version.
+- **D10** — the `.hwh` shows Vivado `2022.1` (the paper never states one); we
+  use `2022.2`, the version FINN 0.10 documents (DECISIONS.md 2026-10-20).
 - **D9 — PENDING** — the board itself is absent, so every Tier-2 experiment is
   blocked regardless of these files.
 
@@ -48,7 +48,7 @@ board_files/...     # as packaged by MYIR
 
 ```bash
 # NOT RUN in this phase
-cp -r <myir_board_files>/mys-7z020 "$FINN_XILINX_PATH/Vivado/2022.1/data/boards/board_files/"
+cp -r <myir_board_files>/mys-7z020 "$FINN_XILINX_PATH/Vivado/2022.2/data/boards/board_files/"
 # or point Vivado at a custom repo:
 #   set_param board.repoPaths {<this directory>}
 ```

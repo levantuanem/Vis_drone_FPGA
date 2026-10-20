@@ -237,3 +237,54 @@ file records **what the code actually does**, with the file that does it.
   patience 30.
 - **Not yet trained.** `runs/pruned_4w4a` holds the MSE run and is kept as
   evidence; the next run needs a new `--name`, not `--resume`.
+
+### 2026-10-17 — T1.3 trained with the YOLOv5 loss; patience vs OneCycleLR
+
+- **Run `runs/pruned_4w4a_ciou`** (patience 30) early-stopped at epoch 170,
+  best mAP@0.5 **0.0868** at epoch 140. `OneCycleLR` spans all 300 epochs
+  (peak at epoch 90), so at the stop the LR was still 68 % of `lr0` and the
+  run never reached its low-LR phase.
+- **Run `runs/pruned_4w4a_ciou_p300`** (`--patience 300`, all 300 epochs):
+  best mAP@0.5 **0.0895** at epoch 298. `val.py` on `val`: P 0.373, R 0.117,
+  mAP 0.0895, TP 1,652 / 14,064 GT (paper CONTEXT 0.4816 / 0.1716 / 0.1768).
+  Finishing the schedule gained only +0.003, so the LR schedule is not the
+  gap. Final train losses (box 0.131, obj 0.239) are below Table 5's (0.153,
+  0.305) while val mAP is half: suspect the missing mosaic / scale /
+  translate (A4), unconfirmed — loss scales may not match exactly.
+- Logs moved to `runs/<name>/train.log`.
+
+#### Still open
+
+- Patience 30 with a 300-epoch `OneCycleLR` cuts runs short; use
+  `--patience 300` until the scheduler matches YOLOv5's.
+- `images/test-dev` is not converted; `val` remains the reporting split (D3).
+
+### 2026-10-17 — T1.4 QONNX export
+
+- `export.py --weights runs/pruned_4w4a_ciou_p300/best.pt` →
+  `build/model_qonnx.onnx`, opset 13. Brevitas `export_qonnx` requires
+  `onnxoptimizer`; installed 0.4.2 and pinned `onnx==1.17.0`, `qonnx==1.0.0`,
+  `onnxoptimizer==0.4.2` in `requirements/train.requirements.txt`.
+- Checked with qonnx `execute_onnx`: input `[1,3,416,416]`, output
+  `[1,18,13,13]`, no detect head; 10 Conv, 10 BatchNormalization, 9 Relu,
+  6 MaxPool, 1 Pad, 1 Div, 21 Quant with bit widths 8 (input, first/last
+  weights, output) and 4 elsewhere. On 4 `val` images the graph matches
+  PyTorch exactly on 3 and within 1 LSB (1/127) on one.
+
+### 2026-10-20 — D10 resolved: FINN 0.10 + Vivado/Vitis 2022.2
+
+- **Finding.** FINN `v0.10`'s `getting_started.rst` requires "a working
+  Vitis/Vivado 2022.2 installation" and its `run-docker.sh` examples 2022.2;
+  `v0.9`'s require 2022.1. So the paper's FINN 0.10 and the `visdrone.hwh`
+  Vivado 2022.1 are not a documented pairing.
+- **USER DECISION:** FINN 0.10 + Vivado/Vitis **2022.2**: keeps the paper's
+  FINN version and uses its supported tools. Alternatives rejected: 0.10 +
+  2022.1 (unsupported), 0.9 + 2022.1 (differs from the paper's FINN).
+- **Consequence.** Table 7 resources and timing may differ slightly from the
+  reference bitstream for tool-version reasons alone.
+- **Code.** `arch_spec.VIVADO_VERSION = "2022.2"`;
+  `arch_spec.REFERENCE_VIVADO_VERSION = "2022.1"` keeps the repository fact.
+  `step_04_synth.preflight` now expects 2022.2; `finn.env.sh.example`,
+  `finn_build/`, the board-file README and `README.md` updated.
+- Host: Ubuntu 20.04.6, which Vivado 2022.2 supports; FINN itself runs in
+  its Docker image.

@@ -29,5 +29,7 @@ thop==0.1.1.post2209072238
 
 # Export / graph tooling (versions NOT given by the paper -- OUR ASSUMPTION,
 # pin whatever brevitas 0.9.0 and FINN 0.10 agree on and record it here)
-onnx
-qonnx
+onnx==1.17.0
+qonnx==1.0.0
+# brevitas export_qonnx refuses to run without it
+onnxoptimizer==0.4.2

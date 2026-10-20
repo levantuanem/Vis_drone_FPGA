@@ -46,7 +46,10 @@ DEVICE_BRAM18K = 140
 # while paper §3 prose says XC7Z020CLG400-2. We build for -1.
 FPGA_PART = "xc7z020clg400-1"
 FPGA_BOARD = "myir.com:mys-7z020:part0:2.1"   # REPOSITORY FACT visdrone.hwh
-VIVADO_VERSION = "2022.1"                     # REPOSITORY FACT visdrone.hwh
+REFERENCE_VIVADO_VERSION = "2022.1"           # REPOSITORY FACT visdrone.hwh
+# DECISION D10 (2026-10-20): FINN 0.10 documents Vivado/Vitis 2022.2 only;
+# 2022.1 is FINN 0.9's pairing. We follow FINN 0.10 and record the gap.
+VIVADO_VERSION = "2022.2"
 FINN_VERSION = "0.10"                         # PAPER FACT §3
 TARGET_CLOCK_MHZ = 200.0                      # REPOSITORY FACT model_info.json
 CLOCK_MODE = "aggressive"                     # REPOSITORY FACT model_info.json

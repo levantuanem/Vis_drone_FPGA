@@ -115,7 +115,8 @@ def test_anchors_and_head_geometry():
 
 def test_hardware_target_decisions():
     assert A.FPGA_PART == "xc7z020clg400-1"       # DECISION D1
-    assert A.VIVADO_VERSION == "2022.1"           # REPOSITORY FACT
+    assert A.REFERENCE_VIVADO_VERSION == "2022.1" # REPOSITORY FACT
+    assert A.VIVADO_VERSION == "2022.2"           # DECISION D10
     assert A.FINN_VERSION == "0.10"               # PAPER FACT
     assert A.FPGA_BOARD == "myir.com:mys-7z020:part0:2.1"
     assert A.TARGET_CLOCK_MHZ == 200.0

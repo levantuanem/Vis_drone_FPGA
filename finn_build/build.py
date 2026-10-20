@@ -17,7 +17,7 @@ STEPS = [
     ("03_fifos", "T1.7", "FIFO depth characterisation (DERIVED, A24)",
      ["FINN 0.10", "Verilator", "pyverilator"]),
     ("04_synth", "T1.9", "HLS synth -> stitch -> ZynqBuild (Table 7, Figs. 12/13/16/17)",
-     ["FINN 0.10", "Vivado 2022.1", "Vitis HLS 2022.1", "MYIR board files"]),
+     ["FINN 0.10", "Vivado 2022.2", "Vitis HLS 2022.2", "MYIR board files"]),
     ("05_rtlsim", "T1.10", "RTLSim throughput (Table 8 RTLSim column)",
      ["FINN 0.10", "Verilator"]),
 ]
@@ -46,12 +46,13 @@ def plan():
                      "configs/quant.yaml"])))
     print("\nBLOCKERS (nothing installed by design):")
     print("  - FINN 0.10 + Docker image            -> steps 01-05")
-    print("  - Vivado + Vitis HLS 2022.1           -> step 04")
+    print("  - Vivado + Vitis HLS 2022.2           -> step 04")
     print("  - MYIR mys-7z020 board files          -> step 04")
     print("  - Verilator / pyverilator (in image)  -> steps 03, 05")
     print("  - NUM_DEFAULT_WORKERS=1 (15 GB RAM)   -> steps 03-05")
-    print("\nDECISION D10 OPEN: FINN 0.10 <-> Vivado 2022.1 pairing is UNVERIFIED.")
-    print("Phase 0 feasibility spike must confirm it before committing to a build.")
+    print("\nDECISION D10: FINN 0.10 + Vivado 2022.2 (FINN 0.10's documented pairing;")
+    print("the reference bitstream used {}). Phase 0 spike checks it on this host."
+          .format(A.REFERENCE_VIVADO_VERSION))
 
 
 def main(argv=None):
