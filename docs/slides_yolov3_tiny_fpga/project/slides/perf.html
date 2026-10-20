@@ -1,0 +1,26 @@
+<section id="perf" data-transition="fade" style="background:#F4F5F1;color:#14232E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;font-weight:600;color:#A85F00;letter-spacing:2px;text-transform:uppercase">Kết quả: hiệu năng</p>
+<h2 style="font-size:60px;font-weight:600;line-height:1.15">Thông lượng tỉ lệ tuyến tính theo xung nhịp</h2>
+<div style="display:flex;gap:32px">
+<table style="font-size:28px;color:#14232E;width:900px">
+<tr><th style="width:24%;text-align:left">Clock</th><th style="width:38%;text-align:left">Batch 1</th><th style="width:38%;text-align:left">Batch 100</th></tr>
+<tr><td>50 MHz</td><td>43,9 FPS</td><td>52,2 FPS</td></tr>
+<tr><td>100 MHz</td><td>86,5 FPS</td><td>104,4 FPS</td></tr>
+<tr><td>200 MHz</td><td>164,8 FPS</td><td><b>208,7 FPS</b></td></tr>
+</table>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="background:#FBFBF8;padding:28px;border:1px solid #D9DDD8;border-radius:16px">
+<h3 style="font-size:30px;font-weight:600">Dự tính và thực đo (100 MHz)</h3>
+<p style="font-size:26px;color:#3F4F5A">Ước tính 462 FPS, mô phỏng RTL 135 FPS, đo thực 104 FPS.</p>
+</div>
+<div style="background:#FBFBF8;padding:28px;border:1px solid #D9DDD8;border-radius:16px">
+<h3 style="font-size:30px;font-weight:600">Độ trễ batch 1</h3>
+<p style="font-size:26px;color:#3F4F5A">6,07 ms ở 200 MHz.</p>
+</div>
+</div>
+</div>
+<p style="font-size:28px;color:#3F4F5A">Batch 100 lấp đầy pipeline, hơn batch 1 khoảng 17%. Driver Python làm FPS thực giảm 21–50%.</p>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4B5B66;width:1200px">Calì, Falaschetti, Biagetti · Electronics 2025, 14, 3993</p>
+<p style="position:absolute;left:1500px;bottom:64px;font-size:24px;color:#4B5B66;width:292px;text-align:right">13 / 20</p>
+<aside>Bảng 8, 9, 10. Khoảng cách giữa ước tính và thực đo do lớp MaxPool HLS, chi phí bộ nhớ và driver. Thay driver bằng mã bare-metal đưa 100 MHz lên đúng 134 FPS.</aside>
+</section>

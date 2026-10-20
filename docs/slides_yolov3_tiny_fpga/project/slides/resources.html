@@ -1,0 +1,25 @@
+<section id="resources" data-transition="fade" style="background:#0F1F2B;color:#E8EEEA;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;font-weight:600;color:#F2A33A;letter-spacing:2px;text-transform:uppercase">Sử dụng tài nguyên PL</p>
+<h2 style="font-size:60px;font-weight:600;line-height:1.15;color:#F4F5F1">Dùng gần hết mọi thứ trên chip</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#1A3140;padding:40px;border-radius:16px">
+<p style="font-size:84px;font-weight:700;color:#F2A33A;line-height:1.1">98,6%</p>
+<p style="font-size:30px;font-weight:600;color:#F4F5F1">BRAM</p>
+<p style="font-size:26px;color:#C9D5DB">138 / 140</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#1A3140;padding:40px;border-radius:16px">
+<p style="font-size:84px;font-weight:700;color:#F2A33A;line-height:1.1">92,7%</p>
+<p style="font-size:30px;font-weight:600;color:#F4F5F1">DSP</p>
+<p style="font-size:26px;color:#C9D5DB">204 / 220</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#1A3140;padding:40px;border-radius:16px">
+<p style="font-size:84px;font-weight:700;color:#F2A33A;line-height:1.1">78,2%</p>
+<p style="font-size:30px;font-weight:600;color:#F4F5F1">LUT</p>
+<p style="font-size:26px;color:#C9D5DB">41 605 / 53 200</p>
+</div>
+</div>
+<p style="font-size:28px;color:#C9D5DB">LUT thực tế cao hơn ước tính 26 694 vì Vivado chuyển bớt BRAM sang LUT-RAM và các khối HLS dùng nhiều LUT hơn dự kiến.</p>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#9FB0BA;width:1200px">Calì, Falaschetti, Biagetti · Electronics 2025, 14, 3993</p>
+<p style="position:absolute;left:1500px;bottom:64px;font-size:24px;color:#9FB0BA;width:292px;text-align:right">10 / 20</p>
+<aside>Bảng 7. Tổng số MAC mỗi ảnh: khoảng 113 triệu (4b-4b), 37 triệu (8b-8b), 2,8 triệu (4b-8b). Số liệu ước tính BRAM là 200 nhưng thực tế 138, do một phần bị chuyển sang LUT.</aside>
+</section>

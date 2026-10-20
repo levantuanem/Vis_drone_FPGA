@@ -1,0 +1,25 @@
+<section id="dsp" data-transition="fade" style="background:#F4F5F1;color:#14232E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;font-weight:600;color:#A85F00;letter-spacing:2px;text-transform:uppercase">Tối ưu phần cứng 1</p>
+<h2 style="font-size:60px;font-weight:600;line-height:1.15">RTL hay HLS cho từng lớp</h2>
+<div style="display:flex;gap:32px">
+<table style="font-size:28px;color:#14232E;width:820px">
+<tr><th style="width:40%;text-align:left">Loại DSP</th><th style="width:30%;text-align:left">4b×4b</th><th style="width:30%;text-align:left">8b×8b</th></tr>
+<tr><td>HLS</td><td>1 MAC/DSP</td><td>1 MAC/DSP</td></tr>
+<tr><td>RTL DSP48E1</td><td>4 MAC/DSP</td><td>2 MAC/DSP</td></tr>
+</table>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="background:#FBFBF8;padding:28px;border:1px solid #D9DDD8;border-radius:16px">
+<h3 style="font-size:30px;font-weight:600">RTL: đóng gói DSP</h3>
+<p style="font-size:26px;color:#3F4F5A">Nhiều phép MAC trong một chu kỳ DSP48E1. SWG RTL có parallel window.</p>
+</div>
+<div style="background:#FBFBF8;padding:28px;border:1px solid #D9DDD8;border-radius:16px">
+<h3 style="font-size:30px;font-weight:600">HLS: dùng khi hết DSP</h3>
+<p style="font-size:26px;color:#3F4F5A">Kiểu LUT cho phép unfold thêm mà không vượt 220 DSP.</p>
+</div>
+</div>
+</div>
+<p style="font-size:30px;color:#14232E">Kết quả: trộn RTL và HLS theo từng lớp để dùng hết cả DSP lẫn LUT.</p>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4B5B66;width:1200px">Calì, Falaschetti, Biagetti · Electronics 2025, 14, 3993</p>
+<p style="position:absolute;left:1500px;bottom:64px;font-size:24px;color:#4B5B66;width:292px;text-align:right">8 / 20</p>
+<aside>Bảng 4 của bài. Lớp đầu và cuối dùng trọng số 8 bit nên chỉ đạt 2 MAC/DSP, các lớp giữa đạt 4 MAC/DSP. Tác giả viết một script Python để chuyển nhanh kiểu đặc tả (RTL/HLS) cho từng MVU.</aside>
+</section>

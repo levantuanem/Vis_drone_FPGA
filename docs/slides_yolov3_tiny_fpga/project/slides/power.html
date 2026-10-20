@@ -1,0 +1,25 @@
+<section id="power" data-transition="fade" style="background:#F4F5F1;color:#14232E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;font-weight:600;color:#A85F00;letter-spacing:2px;text-transform:uppercase">Kết quả: công suất</p>
+<h2 style="font-size:60px;font-weight:600;line-height:1.15">Đo thực trên cả board: 2,55 W</h2>
+<div style="display:flex;gap:32px">
+<table style="font-size:28px;color:#14232E;width:900px">
+<tr><th style="width:24%;text-align:left">Clock</th><th style="width:24%;text-align:left">Công suất</th><th style="width:26%;text-align:left">FPS (b=100)</th><th style="width:26%;text-align:left">FPS/W</th></tr>
+<tr><td>Rảnh</td><td>1,90 W</td><td>-</td><td>-</td></tr>
+<tr><td>50 MHz</td><td>2,12 W</td><td>52,2</td><td>24,6</td></tr>
+<tr><td>100 MHz</td><td>2,38 W</td><td>104,4</td><td>43,9</td></tr>
+<tr><td>200 MHz</td><td>2,55 W</td><td>208,7</td><td><b>81,9</b></td></tr>
+</table>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="background:#FBFBF8;padding:28px;border:1px solid #D9DDD8;border-radius:16px">
+<p style="font-size:26px;color:#3F4F5A">1,9 W nằm ở PS và DDR. Phần PL chỉ thêm 0,22–0,65 W.</p>
+</div>
+<div style="background:#FBFBF8;padding:28px;border:1px solid #D9DDD8;border-radius:16px">
+<p style="font-size:26px;color:#3F4F5A">Nhiệt độ die đo 53,1 °C, không tản nhiệt ngoài.</p>
+</div>
+</div>
+</div>
+<p style="font-size:28px;color:#3F4F5A">Tần số cao hiệu quả hơn vì công suất tĩnh của PS được chia cho nhiều khung hơn.</p>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4B5B66;width:1200px">Calì, Falaschetti, Biagetti · Electronics 2025, 14, 3993</p>
+<p style="position:absolute;left:1500px;bottom:64px;font-size:24px;color:#4B5B66;width:292px;text-align:right">14 / 20</p>
+<aside>Đo bằng nguồn bench 5 V đo dòng. Vivado ước tính 3,358 W tổng, cao hơn đo thực vì là ước tính trường hợp xấu. Driver bare-metal sơ bộ tiết kiệm trên 20% công suất so với Linux.</aside>
+</section>

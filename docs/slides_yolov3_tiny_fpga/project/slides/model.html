@@ -1,0 +1,26 @@
+<section id="model" data-transition="fade" style="background:#F4F5F1;color:#14232E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;font-weight:600;color:#A85F00;letter-spacing:2px;text-transform:uppercase">Mô hình</p>
+<h2 style="font-size:60px;font-weight:600;line-height:1.15">Thu gọn YOLOv3-Tiny cho FINN</h2>
+<div style="display:flex;gap:32px">
+<table style="font-size:28px;color:#14232E;width:900px">
+<tr><th style="width:36%;text-align:left">Thay đổi</th><th style="width:64%;text-align:left">Lý do</th></tr>
+<tr><td>Bỏ upsample và concat</td><td>FINN chưa hỗ trợ mạng rẽ nhánh</td></tr>
+<tr><td>Số kênh giảm 5 lần</td><td>Vừa bộ nhớ trong FPGA</td></tr>
+<tr><td>Tách lớp detect</td><td>Chỉ là phép tỉ lệ, hợp với float trên PS</td></tr>
+<tr><td>Một nhánh phát hiện</td><td>Hệ quả của bỏ nhánh rẽ</td></tr>
+</table>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:8px;background:#FBFBF8;padding:32px;border:1px solid #D9DDD8;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600">Lượng tử hóa</h3>
+<p style="font-size:26px;color:#3F4F5A">Trọng số lớp đầu và cuối: INT8. Mọi lớp còn lại: INT4 cho trọng số và kích hoạt.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#FBFBF8;padding:32px;border:1px solid #D9DDD8;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600">Dữ liệu</h3>
+<p style="font-size:26px;color:#3F4F5A">VisDrone, chỉ lớp car. Ảnh 416×416, 300 epoch, batch 64.</p>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4B5B66;width:1200px">Calì, Falaschetti, Biagetti · Electronics 2025, 14, 3993</p>
+<p style="position:absolute;left:1500px;bottom:64px;font-size:24px;color:#4B5B66;width:292px;text-align:right">7 / 20</p>
+<aside>Bảng 1 của bài: 10 lớp tích chập, đầu ra 13×13×18 với HardTanh. Huấn luyện trên Kaggle (Tesla P100), PyTorch 1.13.1, Brevitas 0.9.0.</aside>
+</section>

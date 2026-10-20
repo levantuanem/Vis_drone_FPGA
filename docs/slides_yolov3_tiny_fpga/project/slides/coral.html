@@ -1,0 +1,15 @@
+<section id="coral" data-transition="fade" style="background:#F4F5F1;color:#14232E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;font-weight:600;color:#A85F00;letter-spacing:2px;text-transform:uppercase">So sánh 1</p>
+<h2 style="font-size:60px;font-weight:600;line-height:1.15">Với Google Coral Edge TPU (batch 1)</h2>
+<table style="font-size:28px;color:#14232E">
+<tr><th style="width:24%;text-align:left">Chỉ số</th><th style="width:19%;text-align:left">Coral 250 MHz</th><th style="width:19%;text-align:left">Coral 500 MHz</th><th style="width:19%;text-align:left">FPGA 100 MHz</th><th style="width:19%;text-align:left">FPGA 200 MHz</th></tr>
+<tr><td>Độ trễ (ms)</td><td>9,69</td><td>6,73</td><td>11,56</td><td>6,07</td></tr>
+<tr><td>FPS</td><td>103,2</td><td>148,7</td><td>86,5</td><td><b>164,8</b></td></tr>
+<tr><td>Công suất (W)</td><td>1,2 †</td><td>2,4 †</td><td>2,38</td><td>2,55</td></tr>
+<tr><td>FPS/W</td><td>86,0</td><td>62,0</td><td>36,3</td><td>64,5</td></tr>
+</table>
+<p style="font-size:26px;color:#3F4F5A">† Công suất Coral lấy từ datasheet, không đo. Coral dùng mô hình YOLOv3-Tiny FP32 rồi PTQ int8, không cùng mạng với FPGA.</p>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4B5B66;width:1200px">Calì, Falaschetti, Biagetti · Electronics 2025, 14, 3993</p>
+<p style="position:absolute;left:1500px;bottom:64px;font-size:24px;color:#4B5B66;width:292px;text-align:right">15 / 20</p>
+<aside>Bảng 15. Tốc độ tương đương, FPGA linh hoạt hơn (chọn mạng, độ chính xác bit, RTL tùy biến), còn Coral có ngăn xếp phần mềm đơn giản hơn. FPS/W của FPGA ngang Coral ở 500 MHz nhưng thấp hơn Coral ở 250 MHz.</aside>
+</section>

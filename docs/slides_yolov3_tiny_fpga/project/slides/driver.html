@@ -1,0 +1,28 @@
+<section id="driver" data-transition="fade" style="background:#F4F5F1;color:#14232E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;font-weight:600;color:#A85F00;letter-spacing:2px;text-transform:uppercase">Driver kiểu TPU</p>
+<h2 style="font-size:60px;font-weight:600;line-height:1.15">FPGA như một bộ tăng tốc qua Ethernet</h2>
+<div style="display:flex;gap:24px;align-items:stretch">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FBFBF8;padding:32px;border:1px solid #D9DDD8;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600">InferClient</h3>
+<p style="font-size:26px;color:#3F4F5A">Thu hình, tiền xử lý, gửi khung, hậu xử lý, hiển thị. Bốn luồng song song.</p>
+</div>
+<div style="display:flex;flex-direction:column;justify-content:center">
+<x-shape kind="arrow-right" style="background:#1E7F78;width:80px;height:48px"></x-shape>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FBFBF8;padding:32px;border:1px solid #D9DDD8;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600">WebSocket</h3>
+<p style="font-size:26px;color:#3F4F5A">JSON cho lệnh load_model, status. Nhị phân cho khung ảnh, tiêu đề 16 byte.</p>
+</div>
+<div style="display:flex;flex-direction:column;justify-content:center">
+<x-shape kind="arrow-right" style="background:#1E7F78;width:80px;height:48px"></x-shape>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FBFBF8;padding:32px;border:1px solid #D9DDD8;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600">InferServer</h3>
+<p style="font-size:26px;color:#3F4F5A">Chạy trên ARM, gom lô đến 100 khung, đẩy qua DMA vào IP YOLOv3-Tiny.</p>
+</div>
+</div>
+<p style="font-size:30px;color:#14232E">Nạp mô hình động bằng tệp .fnn (bitstream, hwh, pkl, info json) và kiểm tra MD5.</p>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4B5B66;width:1200px">Calì, Falaschetti, Biagetti · Electronics 2025, 14, 3993</p>
+<p style="position:absolute;left:1500px;bottom:64px;font-size:24px;color:#4B5B66;width:292px;text-align:right">11 / 20</p>
+<aside>Hình 14. Driver PYNQ tự sinh quá thấp cấp nên nhóm viết thêm lớp server/client để board hoạt động như một TPU: chỉ suy luận, các giai đoạn khác chạy ở thiết bị khác.</aside>
+</section>

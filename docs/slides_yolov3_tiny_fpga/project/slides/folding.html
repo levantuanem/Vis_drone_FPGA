@@ -1,0 +1,25 @@
+<section id="folding" data-transition="fade" style="background:#F4F5F1;color:#14232E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:24px;font-weight:600;color:#A85F00;letter-spacing:2px;text-transform:uppercase">Tối ưu phần cứng 2</p>
+<h2 style="font-size:60px;font-weight:600;line-height:1.15">Folding, FIFO và lớp MaxPool nghẽn</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="background:#FBFBF8;padding:28px;border:1px solid #D9DDD8;border-radius:16px">
+<h3 style="font-size:30px;font-weight:600">Folding lặp</h3>
+<p style="font-size:26px;color:#3F4F5A">Bắt đầu SIMD = PE = 1. Mỗi vòng mở rộng lớp chậm nhất cho đến khi cân bằng chu kỳ. Lớp nhỏ giữ nguyên.</p>
+</div>
+<div style="background:#FBFBF8;padding:28px;border:1px solid #D9DDD8;border-radius:16px">
+<h3 style="font-size:30px;font-weight:600">FIFO giữa các lớp</h3>
+<p style="font-size:26px;color:#3F4F5A">Độ sâu tìm bằng mô phỏng RTL (pyverilator). Quá ngắn thì stall, quá dài thì phí BRAM.</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#0F1F2B;padding:40px;border-radius:16px;justify-content:center">
+<p style="font-size:26px;font-weight:600;color:#F2A33A">StreamingMaxPool (HLS)</p>
+<p style="font-size:84px;font-weight:700;color:#F4F5F1;line-height:1.1">2,6×</p>
+<p style="font-size:28px;color:#C9D5DB">570 000 chu kỳ thực tế so với 216 320 dự đoán. Làm thông lượng giảm 3,43 lần.</p>
+</div>
+</div>
+<p style="font-size:28px;color:#3F4F5A">Trọng số nằm hoàn toàn trong BRAM, không truy cập DRAM ngoài.</p>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#4B5B66;width:1200px">Calì, Falaschetti, Biagetti · Electronics 2025, 14, 3993</p>
+<p style="position:absolute;left:1500px;bottom:64px;font-size:24px;color:#4B5B66;width:292px;text-align:right">9 / 20</p>
+<aside>Mạng chạy dạng pipeline nên tốc độ bị giới hạn bởi lớp chậm nhất. Tác giả cho rằng Vitis không unroll tốt vòng lặp trên bản đồ đặc trưng lớn; viết lại bằng RTL sẽ khắc phục nhưng nằm ngoài phạm vi bài.</aside>
+</section>
